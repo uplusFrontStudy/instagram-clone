@@ -17,4 +17,5 @@ firebase.initializeApp(firebaseConfig);
 
 export const authService = firebase.auth();
 
+//firebase의 firestore 인스턴스를 변수에 저장
 export const { firestore } = firebase.firestore();
