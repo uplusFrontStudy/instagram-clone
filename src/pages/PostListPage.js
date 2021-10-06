@@ -1,7 +1,12 @@
 import React from 'react';
+import PostListContainser from '../containers/PostListContainer';
 
 function PostListPage() {
-  return <div>PostList</div>;
+  return (
+    <>
+      <PostListContainser />
+    </>
+  );
 }
 
 export default PostListPage;
