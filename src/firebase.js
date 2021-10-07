@@ -1,5 +1,5 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/storage';
+import * as firebase from 'firebase/app';
+import * as firestore from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -12,6 +12,6 @@ const firebaseConfig = {
 };
 
 //firebaseConfig 정보로 firebase 시작
+firebase.initializeApp(firebaseConfig);
 
-export default firebase.initializeApp(firebaseConfig);
-export const storage = firebase.storage();
+export { firestore };
