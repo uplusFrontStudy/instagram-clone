@@ -1,7 +1,8 @@
 import React from 'react';
+import Profile from '../components/profile/profile';
 
-function ProfilePage() {
-  return <div>profilePage</div>;
+function ProfilePage({ FileInput }) {
+  return <Profile />;
 }
 
 export default ProfilePage;
