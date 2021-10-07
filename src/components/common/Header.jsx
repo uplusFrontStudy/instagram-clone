@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import Responsive from './Responsive';
-import a from '../../modules/index.js';
 import logo from '../../images/instagram_logo.png';
 
 const HeaderBlock = styled.div`
