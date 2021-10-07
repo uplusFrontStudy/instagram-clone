@@ -1,7 +1,8 @@
 import React from 'react';
+import Header from '../components/common/Header';
 
 function PostListPage() {
-  return <div>PostList</div>;
+  return <Header />;
 }
 
 export default PostListPage;
