@@ -1,6 +1,5 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/auth';
-import 'firebase/firestore';
+import * as firebase from 'firebase/app';
+import * as firestore from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -15,7 +14,4 @@ const firebaseConfig = {
 //firebaseConfig 정보로 firebase 시작
 firebase.initializeApp(firebaseConfig);
 
-export const authService = firebase.auth();
-
-//firebase의 firestore 인스턴스를 변수에 저장
-export const { firestore } = firebase.firestore();
+export { firestore };
