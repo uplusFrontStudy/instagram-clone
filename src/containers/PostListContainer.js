@@ -10,12 +10,16 @@ function PostListContainer() {
   useEffect(() => {
     dispatch(listPosts());
   }, [dispatch]);
-  console.log(data);
+
   if (loading) return <div>로딩중..</div>;
   if (error) return <div>에러발생</div>;
-  if (!data) return;
+  if (!data) return null;
 
-  return <PostList posts={data}>확인ㄴ</PostList>;
+  return (
+    <>
+      <PostList posts={data}>확인ㄴ</PostList>
+    </>
+  );
 }
 
 export default PostListContainer;

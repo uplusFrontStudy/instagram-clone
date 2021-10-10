@@ -9,10 +9,9 @@ const LIST_POSTS_FAILURE = 'posts/LIST_POSTS_FAILURE';
 //웹요청 비동기 작업할땐 thunk or saga 함수
 export const listPosts = () => async (dispatch) => {
   dispatch({ type: LIST_POSTS });
-
   try {
     const response = await PostsAPI.listPosts();
-    console.log(`module ${response[0]}`);
+
     dispatch({
       type: LIST_POSTS_SUCCESS,
       payload: response,
