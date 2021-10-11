@@ -34,7 +34,7 @@ const footer = () => {
   return (
     <FooterBlock>
       <Wrapper>
-        <ul class="menu">
+        <ul className="menu">
           <li>
             <a href="javascript:void(0)">소개</a>
           </li>
