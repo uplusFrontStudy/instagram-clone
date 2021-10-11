@@ -2,7 +2,7 @@ import React from 'react';
 import Header from '../components/common/Header';
 
 function PostListPage() {
-  return <Header />;
+  return <div>postListPage</div>;
 }
 
 export default PostListPage;

@@ -1,4 +1,5 @@
 import * as firebase from 'firebase/app';
+import * as firebaseAuth from 'firebase/auth';
 import * as firestore from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -14,4 +15,8 @@ const firebaseConfig = {
 //firebaseConfig 정보로 firebase 시작
 firebase.initializeApp(firebaseConfig);
 
-export { firestore };
+const getAuthenticationStatus = () => {
+  return localStorage.getItem('isAuthenticated');
+};
+
+export { firebase, firestore, firebaseAuth, getAuthenticationStatus };

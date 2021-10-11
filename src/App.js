@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
+import { connect } from 'react-redux';
 import { Route } from 'react-router';
 import LoginPage from './pages/LoginPage';
 import PostListPage from './pages/PostListPage';
@@ -7,9 +8,17 @@ import ProfilePage from './pages/ProfilePage';
 import RegisterPage from './pages/RegisterPage';
 import WritePage from './pages/WritePage';
 
-function App() {
+import { fetchUser } from './modules/auth';
+import Header from './components/common/Header';
+
+function App({ fetchUser }) {
+  useLayoutEffect(() => {
+    fetchUser();
+  }, []);
+
   return (
     <>
+      <Header />
       <Route component={PostListPage} path={['/:username', '/']} exact />
       <Route component={LoginPage} path="/login" />
       <Route component={RegisterPage} path="/register" />
@@ -20,4 +29,4 @@ function App() {
   );
 }
 
-export default App;
+export default connect(null, { fetchUser })(App);
