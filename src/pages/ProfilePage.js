@@ -1,7 +1,8 @@
 import React from 'react';
+import ProfileContainer from '../containers/ProfileContainer';
 
-function ProfilePage() {
-  return <div>profilePage</div>;
+function ProfilePage({ FileInput }) {
+  return <ProfileContainer />;
 }
 
 export default ProfilePage;

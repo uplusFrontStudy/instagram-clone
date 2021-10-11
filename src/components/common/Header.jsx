@@ -16,9 +16,9 @@ const HeaderBlock = styled.div`
 const Wrapper = styled(Responsive)`
   height: 54px;
   display: flex;
+  flex-direction: row;
   padding: 0 20px;
   align-items: center;
-  flex-direction: row;
   justify-content: space-between;
 
   .logo {

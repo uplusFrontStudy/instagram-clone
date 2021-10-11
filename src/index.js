@@ -1,11 +1,10 @@
+import App from './App';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import rootReducer from './modules';
 import { Router } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
-import App from './App';
-import logger from 'redux-logger';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import ReduxThunk from 'redux-thunk';
 import { createBrowserHistory } from 'history';
@@ -18,7 +17,6 @@ const store = createStore(
   composeWithDevTools(
     applyMiddleware(
       ReduxThunk.withExtraArgument({ history: customHistory }),
-      logger,
     ),
   ),
 ); // 여러개의 미들웨어를 적용 할 수 있습니다.
