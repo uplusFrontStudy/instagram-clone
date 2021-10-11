@@ -13,7 +13,6 @@ const store = createStore(
   composeWithDevTools(applyMiddleware(ReduxThunk)),
 );
 
-console.dir(store.getState().posts.posts);
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
