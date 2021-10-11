@@ -1,27 +1,31 @@
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
-import Profile from '../components/profile/profile';
+import Profile from '../components/profile/Profile';
+import { getProfileImage } from '../modules/profile';
 
-const ProfileContainer = ({ image, updateImage, deleteImage }) => {
+const ProfileContainer = ({
+  getProfileImage,
+  loadingProfileImage,
+  profileImage,
+}) => {
+  useEffect(() => {
+    getProfileImage();
+  }, [getProfileImage]);
+
   return (
     <Profile
-      image={image}
-      onUpdateImage={updateImage}
-      onDeleteImage={deleteImage}
+      loadingProfileImage={loadingProfileImage}
+      profileImage={profileImage}
     />
   );
 };
 
-const mapStateProps = (state) => ({
-  image: state.profile.image,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  updateImage: () => {
-    console.log('updateImage');
+export default connect(
+  ({ profile }) => ({
+    loadingProfileImage: profile.loadingProfileImage,
+    profileImage: profile.profileImage,
+  }),
+  {
+    getProfileImage,
   },
-  deleteImage: () => {
-    console.log('deleteImage');
-  },
-});
-
-export default connect(mapStateProps, mapDispatchToProps)(ProfileContainer);
+)(ProfileContainer);

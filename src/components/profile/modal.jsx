@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
+import { storage } from '../../firebase';
 
 const Modal = (props) => {
     const inputRef = useRef();
@@ -12,13 +13,13 @@ const Modal = (props) => {
     const onProfileUpload = event => {
 
         const file = event.target.files[0];
-        /*
+
         const storageRef = storage.ref();
         const fileRef = storageRef.child(file.name);
         fileRef.put(file).then(()=>{
-            console.log("upload");
+            // 이미지 바꾸기.......ㅜㅜ
         });
-        */
+
     };
 
     return (props.trigger) ? (

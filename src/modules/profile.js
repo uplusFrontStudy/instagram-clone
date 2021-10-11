@@ -1,39 +1,65 @@
-// actions, constants, reducers
+import { handleActions } from 'redux-actions';
+import * as api from '../api/profile';
 
 // 1. 액션 타입 정의
-const UPDATE_IMAGE = 'profile/UPDATE_IMAGE';
-const DELETE_IMAGE = 'profile/DELETE_IMAGE';
+const GET_PROFILE_IMAGE = 'profile/GET_PROFILE_IMAGE';
+const GET_PROFILE_IMAGE_SUCCESS = 'profile/GET_PROFILE_IMAGE_SUCCESS';
+const GET_PROFILE_IMAGE_FAIL = 'profile/GET_PROFILE_IMAGE_FAIL';
 
-// 2. 액션 생성 함수 만들기
-export const updateImage = (userId, image) => {
-  return {
-    type: UPDATE_IMAGE,
-    userId,
-    image,
-  };
-};
-
-export const deleteImage = (userId) => {
-  return {
-    userId,
-    type: DELETE_IMAGE,
-  };
-};
-
-// 3-1. 초기 상태
-const initialState = {
-  image: null,
-};
-
-// 3-2. 리듀서 함수 만들기
-function profile(state = initialState, action) {
-  switch (action.type) {
-    case UPDATE_IMAGE:
-      return { ...state, image: action.image }; //
-    case DELETE_IMAGE:
-      return { ...state, image: null }; //
-    default:
-      return state;
+// 2. thunk 함수를 생성한다.
+//    👉 thunk 함수 내부는 시작, 성공, 실패 했을 때 다른 액션을 dispatch 한다!
+export const getProfileImage = (id) => async (dispatch) => {
+  dispatch({ type: GET_PROFILE_IMAGE }); // 요청을 시작한 것을 알림
+  try {
+    const reponse = await api.getProfileImage();
+    dispatch({
+      type: GET_PROFILE_IMAGE_SUCCESS,
+      payload: reponse,
+    }); // 요청 성공
+  } catch (e) {
+    dispatch({
+      type: GET_PROFILE_IMAGE_FAIL,
+      payload: e,
+      error: true,
+    }); // 에러 발생
+    throw e; // 나중에 컴포넌트 단에서 에러를 조회할 수 있게 해 줌
   }
-}
-export default profile;
+};
+
+// 초기 state를 선언
+const initalState = {
+  loding: {
+    GET_PROFILE_IMAGE: false,
+  },
+  profileImage: null,
+};
+
+const sample = handleActions(
+  {
+    [GET_PROFILE_IMAGE]: (state) => ({
+      ...state,
+      loading: {
+        ...state.loading,
+        GET_PROFILE_IMAGE: true, // 요청 시작
+      },
+    }),
+    [GET_PROFILE_IMAGE_SUCCESS]: (state, action) => ({
+      ...state,
+      loading: {
+        ...state.loading,
+        GET_PROFILE_IMAGE: false, // 요청 완료
+      },
+      profileImage: action.payload,
+    }),
+    [GET_PROFILE_IMAGE_FAIL]: (state, action) => ({
+      ...state,
+      loading: {
+        ...state.loading,
+        GET_PROFILE_IMAGE: false, // 요청 완료
+      },
+    }),
+  },
+  initalState,
+);
+
+export default sample;
