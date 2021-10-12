@@ -8,6 +8,7 @@ import {
   signOut,
 } from 'firebase/auth';
 
+import * as AuthAPI from '../api/auth';
 const myAuth = firebaseAuth.getAuth();
 
 const CHANGE_FILED = 'auth/CHANGE_FIELD';
@@ -128,7 +129,8 @@ const fetchUserErrorAction = createAction(FETCH_USER_FAILURE, ({ error }) => ({
 // 로그인
 export const login = (email, password) => async (dispatch) => {
   try {
-    await signInWithEmailAndPassword(myAuth, email, password);
+    const user = AuthAPI.login(email, password);
+    console.log(user);
     dispatch(loginSuccessAction({ email, password }));
   } catch (error) {
     // const errorCode = error.code;
@@ -180,16 +182,16 @@ export const fetchUser = () => async (dispatch) => {
 
 /* const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.LOGIN_REQUEST:
-    case actionTypes.SIGNUP_REQUEST:
+    case LOGIN_REQUEST:
+    case SIGNUP_REQUEST:
       return { ...state, isLoading: true };
-    case actionTypes.LOGIN_SUCCESS:
-    case actionTypes.SIGNUP_SUCCESS:
+    case LOGIN_SUCCESS:
+    case SIGNUP_SUCCESS:
       return { ...state, isLoading: false, user: action.user };
-    case actionTypes.LOGIN_FAILURE:
-    case actionTypes.SIGNUP_FAILURE:
+    case LOGIN_FAILURE:
+    case SIGNUP_FAILURE:
       return { ...state, isLoading: false, error: action.error };
-    case actionTypes.LOGOUT:
+    case LOGOUT:
       return { ...state, user: null };
     default:
       return state;

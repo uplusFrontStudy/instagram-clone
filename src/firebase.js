@@ -1,7 +1,7 @@
 import * as firebase from 'firebase/app';
 import * as firebaseAuth from 'firebase/auth';
 import * as firestore from 'firebase/firestore';
-import 'firebase/compat/storage';
+import * as firebaseStorage from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -13,10 +13,12 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
+firebase.initializeApp(firebaseConfig);
+
 const getAuthenticationStatus = () => {
   return localStorage.getItem('isAuthenticated');
 };
 
-export { firebase, firestore, firebaseAuth, getAuthenticationStatus };
-firebase.initializeApp(firebaseConfig);
-export const storage = firebase.storage();
+const storage = firebaseStorage.getStorage();
+
+export { firebase, firestore, firebaseAuth, getAuthenticationStatus, storage };
