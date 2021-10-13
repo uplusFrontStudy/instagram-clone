@@ -39,6 +39,7 @@ const Wrapper = styled(Responsive)`
   }
 `;
 const Header = ({ logout, history }) => {
+  // 인증여부
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   useLayoutEffect(() => {
     setIsAuthenticated(getAuthenticationStatus());

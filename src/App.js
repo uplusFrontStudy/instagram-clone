@@ -11,7 +11,7 @@ import ProfileEditPage from './pages/ProfileEditPage';
 
 import { fetchUser } from './modules/auth';
 
-function App({ fetchUser }) {
+function App() {
   useLayoutEffect(() => {
     fetchUser();
   }, []);

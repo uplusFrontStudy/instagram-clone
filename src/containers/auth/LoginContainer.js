@@ -5,7 +5,7 @@ import { changeField, initializeForm, login } from '../../modules/auth';
 import AuthForm from '../../components/auth/AuthForm';
 // import { check } from '../../modules/user';
 
-const LoginForm = ({ history }) => {
+const LoginContainer = ({ history }) => {
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const { form, auth, authError } = useSelector(({ form, auth }) => ({
@@ -13,16 +13,6 @@ const LoginForm = ({ history }) => {
     auth,
     authError: auth.authError,
   }));
-
-  /*   createUserWithEmailAndPassword(authTest, 'test@test.com', 'qwer1234!@')
-    .then((u) => {
-      console.log(u);
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode, errorMessage);
-    }); */
 
   // 인풋 변경 이벤트 핸들러
   const onChange = (e) => {
@@ -47,10 +37,8 @@ const LoginForm = ({ history }) => {
       return false;
     }
 
-    login(
-      email,
-      password,
-    )(dispatch)
+    console.log(password);
+    dispatch(login({ email, password }))
       .then(() => {
         alert('Login successful');
         history.push('/');
@@ -67,23 +55,16 @@ const LoginForm = ({ history }) => {
   }, []);
 
   useEffect(() => {
-    // if (authError) {
-    //   console.log('오류 발생');
-    //   console.log(authError);
-    //   setError('로그인 실패');
-    //   return;
-    // }
+    if (authError) {
+      console.log('오류 발생');
+      setError('로그인 실패');
+      return;
+    }
     // if (auth) {
     //   console.log('로그인 성공');
     //   dispatch(check());
     // }
-    // myFirebase
-    //   .auth()
-    //   .signInWithEmailAndPassword(email, password)
-    //   .then((user) => {
-    //     console.log(user);
-    //   });
-  }, []);
+  }, [auth, authError]);
 
   useEffect(() => {
     // if (user) {
@@ -101,4 +82,4 @@ const LoginForm = ({ history }) => {
   );
 };
 
-export default withRouter(LoginForm);
+export default withRouter(LoginContainer);

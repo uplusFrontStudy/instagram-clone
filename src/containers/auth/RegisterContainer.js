@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { changeField, initializeForm, register } from '../../modules/auth';
 import AuthForm from '../../components/auth/AuthForm';
 
-const RegisterForm = ({ history }) => {
+const RegisterContainer = ({ history }) => {
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const { form, auth, authError } = useSelector(({ auth }) => ({
@@ -36,10 +36,7 @@ const RegisterForm = ({ history }) => {
       return false;
     }
 
-    register(
-      email,
-      password,
-    )(dispatch)
+    dispatch(register({ email, password }))
       .then(() => {
         alert('Register successful');
         history.push('/login');
@@ -52,7 +49,7 @@ const RegisterForm = ({ history }) => {
 
   // 컴포넌트가 처음 렌더링 될 때 form 을 초기화함
   useEffect(() => {
-    dispatch(initializeForm('login'));
+    dispatch(initializeForm({ form: 'register' }));
   }, []);
 
   useEffect(() => {
@@ -66,12 +63,6 @@ const RegisterForm = ({ history }) => {
     //   console.log('로그인 성공');
     //   dispatch(check());
     // }
-    // myFirebase
-    //   .auth()
-    //   .signInWithEmailAndPassword(email, password)
-    //   .then((user) => {
-    //     console.log(user);
-    //   });
   }, []);
 
   useEffect(() => {
@@ -90,4 +81,4 @@ const RegisterForm = ({ history }) => {
   );
 };
 
-export default withRouter(RegisterForm);
+export default withRouter(RegisterContainer);
