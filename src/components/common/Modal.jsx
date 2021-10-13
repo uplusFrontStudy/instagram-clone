@@ -2,36 +2,25 @@ import React, { useRef } from 'react';
 import styled from 'styled-components';
 
 const Modal = ({trigger, setTrigger, upload}) => {
-    const inputRef = useRef();
 
-    const onInputClick = event => {
-        event.preventDefault();
-        inputRef.current.click();
-    };
-
-    function onProfileUpload(event) {
-        const file = event.target.files[0];
-        upload(file, 'idid');
-        console.log('upload=',file)
-        setTrigger(false);
-    };
-
-    return (trigger) ? (
-        <ModalContainer>
+    return (false) ? (
+        <ModalBG>
             <ModalInner>
-                <ModalTitle>프로필 사진 바꾸기</ModalTitle>
-                
-                <FileInput ref={inputRef} type="file" accept="image/*" name="profile" onChange={onProfileUpload}/>
-            <ColorButton red onClick={onInputClick}>사진 업로드</ColorButton>
-                <ColorButton blue>현재 사진 삭제</ColorButton>
-                <Button onClick={() => setTrigger(false)}>취소</Button>                
+                <section>프로필 사진 바꾸기</section>
+                <section>
+                    <FileInput type="file" accept="image/*" name="profile"/>
+                    <ColorButton red>사진 업로드</ColorButton>
+                    <ColorButton blue>현재 사진 삭제</ColorButton>
+                    <Button onClick={() => setTrigger(false)}>취소</Button>  
+                </section>
+                <section>
+                </section>
             </ModalInner>
-        </ModalContainer>
-
+        </ModalBG>
     ) : "";
 }
 
-const ModalContainer = styled.div`
+const ModalBG = styled.div`
     position: fixed;
     top: 0;
     left: 0;

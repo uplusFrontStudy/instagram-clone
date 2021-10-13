@@ -5,8 +5,8 @@ import { uploadProfileImage } from '../modules/profile';
 
 function ModalConatainer({ trigger, setTrigger }) {
   const dispatch = useDispatch();
-  const upload = useCallback((file, userId) => {
-    dispatch(uploadProfileImage(file, userId));
+  const upload = useCallback(() => {
+    dispatch(uploadProfileImage());
   });
   //const upload = uploadProfileImage();
   return <Modal trigger={trigger} setTrigger={setTrigger} upload={upload} />;

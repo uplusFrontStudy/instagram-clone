@@ -90,7 +90,6 @@ const PostItem = styled.div`
 function PostList({ posts }) {
   return (
     <>
-      <Header />
       <Categories />
       <PostListBlock>
         <WritePostButtonWrapper>
