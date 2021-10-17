@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 export const FileUploadContainer = styled.section`
@@ -30,6 +30,15 @@ export const FormField = styled.input`
   }
 `;
 
+export const CoverPreviewImage = styled.img`
+  position: absolute;
+  width: 100%;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+`;
+
 export const DragDropText = styled.p`
   color: #262626;
   font-size: 16px;
@@ -37,26 +46,19 @@ export const DragDropText = styled.p`
   line-height: 24px;
   margin-bottom: 12px;
 `;
-
-const KILO_BYTES_PER_BYTE = 1000;
-const DEFAULT_MAX_FILE_SIZE_IN_BYTES = 500000;
-
 const convertNestedObjectToArray = (nestedObj) =>
   Object.keys(nestedObj).map((key) => nestedObj[key]);
 
-const convertBytesToKB = (bytes) => Math.round(bytes / KILO_BYTES_PER_BYTE);
+const DEFAULT_MAX_FILE_SIZE_IN_BYTES = 500000;
 
-const FileUpload = ({
+export default function FileUpload({
   updateFilesCb,
+  onChangeImages,
+  images,
   maxFileSizeInBytes = DEFAULT_MAX_FILE_SIZE_IN_BYTES,
   ...otherProps
-}) => {
-  const fileInputField = useRef(null);
-  const [files, setFiles] = useState({});
-
-  const handleUploadBtnClick = () => {
-    fileInputField.current.click();
-  };
+}) {
+  const [files, setFilse] = useState({});
 
   const addNewFiles = (newFiles) => {
     for (let file of newFiles) {
@@ -70,34 +72,36 @@ const FileUpload = ({
     return { ...files };
   };
 
-  const callUpdateFilesCb = (files) => {
+  const insertFile = (files) => {
     const filesAsArray = convertNestedObjectToArray(files);
-    updateFilesCb(filesAsArray);
+    onChangeImages(filesAsArray);
   };
 
   const handleNewFileUpload = (e) => {
     const { files: newFiles } = e.target;
     if (newFiles.length) {
-      let updatedFiles = addNewFiles(newFiles);
-      setFiles(updatedFiles);
-      callUpdateFilesCb(updatedFiles);
+      let addFiles = addNewFiles(newFiles);
+      setFilse(addFiles);
+      insertFile(addFiles);
     }
   };
 
   return (
     <>
       <FileUploadContainer>
-        <DragDropText>이미지 파일을 끌어다 놓으세요</DragDropText>
-
-        <FormField
-          type="file"
-          ref={fileInputField}
-          onChange={handleNewFileUpload}
-          {...otherProps}
-        />
+        <FormField type="file" onChange={handleNewFileUpload} {...otherProps} />
+        {files &&
+          !otherProps.multiple &&
+          Object.keys(files).map((filename) => {
+            let file = files[filename];
+            return (
+              <CoverPreviewImage
+                src={URL.createObjectURL(file)}
+                alt="coverImage"
+              ></CoverPreviewImage>
+            );
+          })}
       </FileUploadContainer>
     </>
   );
-};
-
-export default FileUpload;
+}
