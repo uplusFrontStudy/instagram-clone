@@ -18,6 +18,7 @@ const LoginContainer = ({ history }) => {
   // 인풋 변경 이벤트 핸들러
   const onChange = (e) => {
     const { value, name } = e.target;
+    console.log(value, name);
     dispatch(
       changeField({
         form: 'login',
@@ -32,12 +33,6 @@ const LoginContainer = ({ history }) => {
     e.preventDefault();
     const { emailAddress, password } = form;
 
-    // 유효성검사 추후 분리
-    if (!emailAddress || !password) {
-      alert('이메일주소와 비밀번호를 입력해주세요.');
-      return false;
-    }
-
     try {
       dispatch(login({ emailAddress, password }));
       history.push(ROUTES.DASHBOARD);
@@ -46,29 +41,6 @@ const LoginContainer = ({ history }) => {
       setError(error.message);
     }
   };
-
-  // 컴포넌트가 처음 렌더링 될 때 form 을 초기화함
-  useEffect(() => {
-    dispatch(initializeForm('login'));
-  }, []);
-
-  useEffect(() => {
-    if (authError) {
-      console.log('오류 발생');
-      setError('로그인 실패');
-      return;
-    }
-    // if (auth) {
-    //   console.log('로그인 성공');
-    //   dispatch(check());
-    // }
-  }, [auth, authError]);
-
-  useEffect(() => {
-    // if (user) {
-    //   history.push('/');
-    // }
-  }, [history]);
 
   return (
     <AuthForm

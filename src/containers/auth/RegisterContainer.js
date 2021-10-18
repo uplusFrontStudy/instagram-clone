@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 import { changeField, initializeForm, register } from '../../modules/auth';
 import AuthForm from '../../components/auth/AuthForm';
 import { doesUsernameExist } from '../../api/auth';
-import { firestore } from '../../firebase';
 import * as ROUTES from '../../constants/routes';
 import * as authAPI from '../../api/auth';
 
@@ -75,7 +74,7 @@ const RegisterContainer = ({ history }) => {
   // 컴포넌트가 처음 렌더링 될 때 form 을 초기화함
   useEffect(() => {
     dispatch(initializeForm({ form: 'register' }));
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     // if (authError) {

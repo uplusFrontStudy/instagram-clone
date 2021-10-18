@@ -33,7 +33,7 @@ export const logout = createRequestThunk(LOGOUT, authAPI.logout);
 // 초기상태값
 const initialState = {
   login: {
-    username: '',
+    emailAddress: '',
     password: '',
     authError: null,
   },
@@ -134,7 +134,7 @@ const fetchUserErrorAction = createAction(FETCH_USER_FAILURE, ({ error }) => ({
 }; */
 
 // 회원상태 패치
-export const fetchUser = () => async (dispatch) => {
+/* export const fetchUser = () => async (dispatch) => {
   dispatch(fetchUserRequestAction());
   try {
     await authAPI.fetchUser();
@@ -143,7 +143,7 @@ export const fetchUser = () => async (dispatch) => {
     dispatch(fetchUserErrorAction(error));
     throw error;
   }
-};
+}; */
 
 // 리듀서 생성
 export default function auth(state = initialState, action) {
@@ -190,7 +190,6 @@ export default function auth(state = initialState, action) {
       return {
         ...state
       };
-
     default:
       return state;
   }

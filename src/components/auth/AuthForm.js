@@ -63,29 +63,35 @@ const AuthForm = ({ type, form, onChange, onSubmit }) => {
           aria-required="true"
           placeholder="이메일주소"
           maxlength="75"
-          name="username"
+          name="emailAddress"
           onChange={onChange}
           type="text"
           value={form.emailAddress}
         />
-        <StyledInput
-          aria-label="성명"
-          aria-required="true"
-          placeholder="성명"
-          name="fullName"
-          type="text"
-          onChange={onChange}
-          value={form.fullName}
-        />
-        <StyledInput
-          aria-label="사용자 이름"
-          aria-required="true"
-          placeholder="사용자 이름"
-          name="username"
-          type="text"
-          onChange={onChange}
-          value={form.username}
-        />
+        {type === 'register' && (
+          <StyledInput
+            aria-label="성명"
+            aria-required="true"
+            placeholder="성명"
+            name="fullName"
+            type="text"
+            onChange={onChange}
+            value={form.fullName}
+          />
+        )}
+
+        {type === 'register' && (
+          <StyledInput
+            aria-label="사용자 이름"
+            aria-required="true"
+            placeholder="사용자 이름"
+            name="username"
+            type="text"
+            onChange={onChange}
+            value={form.username}
+          />
+        )}
+
         <StyledInput
           aria-label="비밀번호"
           aria-required="true"
@@ -95,6 +101,7 @@ const AuthForm = ({ type, form, onChange, onSubmit }) => {
           onChange={onChange}
           value={form.password}
         />
+
         <ButtonWithMarginTop cyan fullWidth style={{ marginTop: '1rem' }}>
           {text}
         </ButtonWithMarginTop>
@@ -107,9 +114,12 @@ const AuthForm = ({ type, form, onChange, onSubmit }) => {
         <div>페이스북 로그인</div>
         <div className="flex justify-center items-center flex-col w-full bg-white p-4 rounded border border-gray-primary">
           <p className="text-sm">
-            계정이 없으신가요?{` `}
-            <Link to={ROUTES.SIGN_UP} className="font-bold text-blue-medium">
-              회원가입
+            {type === 'login' ? '계정이 없으신가요?' : '계정이 있으신가요? '}
+            <Link
+              to={type === 'login' ? ROUTES.SIGN_UP : ROUTES.LOGIN}
+              className="font-bold text-blue-medium"
+            >
+              {type === 'login' ? '회원가입' : '로그인'}
             </Link>
           </p>
         </div>

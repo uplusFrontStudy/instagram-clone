@@ -7,18 +7,15 @@ import {
 } from 'firebase/auth';
 
 const myAuth = firebaseAuth.getAuth();
-const { getFirestore, getDocs, collection, query, where, addDoc, doc } =
-  firestore;
+const { getFirestore, getDocs, collection, query, where, addDoc } = firestore;
 
 // 로그인
 export const login = async ({ emailAddress, password }) => {
-  // promise 반환
   const response = await signInWithEmailAndPassword(
     myAuth,
     emailAddress,
     password,
   );
-  localStorage.setItem('userInfo', JSON.stringify(response.user));
   return response;
 };
 
@@ -40,7 +37,6 @@ export const register = async ({
     emailAddress,
     password,
   );
-
   return response;
 };
 
@@ -50,7 +46,6 @@ export const doesUsernameExist = async (username) => {
     where('username', '==', username.toLowerCase()),
   );
   const result = await getDocs(q);
-
   return result.docs.length > 0;
 };
 
@@ -60,7 +55,6 @@ export const getUserByUsername = async (username) => {
     where('username', '==', username.toLowerCase()),
   );
   const result = await getDocs(q);
-
   return result.docs.map((item) => ({
     ...item.data(),
     docId: item.id,
@@ -77,7 +71,6 @@ export const getUserByUserId = async (userId) => {
     ...item.data(),
     docId: item.id,
   }));
-
   return user;
 };
 
@@ -88,7 +81,14 @@ export const addUser = async (data) => {
 
 // 회원상태확인
 export const fetchUser = async () => {
-  return await onAuthStateChanged(myAuth, (currentUser) => {
-    return currentUser;
+  console.log(firebaseAuth);
+  await onAuthStateChanged(myAuth, (authUser) => {
+    if (authUser) {
+      localStorage.setItem('authUser', JSON.stringify(authUser));
+    } else {
+      localStorage.removeItem('authUser');
+    }
+    console.log(authUser);
+    return authUser;
   });
 };

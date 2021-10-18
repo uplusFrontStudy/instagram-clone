@@ -16,7 +16,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const getAuthenticationStatus = () => {
-  return localStorage.getItem('userInfo');
+  return localStorage.getItem('authUser');
 };
 
 const storage = firebaseStorage.getStorage();

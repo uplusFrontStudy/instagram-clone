@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import Responsive from './Responsive';
 import logo from '../../images/instagram_logo.png';
 import { logout } from '../../modules/auth';
-import { getAuthenticationStatus } from '../../firebase.js';
+import * as authAPI from '../../api/auth';
+import { getAuthenticationStatus } from '../../firebase';
 
 const HeaderBlock = styled.div`
   position: fixed;

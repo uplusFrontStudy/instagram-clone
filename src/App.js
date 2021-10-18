@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Route } from 'react-router';
 import LoginPage from './pages/LoginPage';
@@ -8,13 +8,14 @@ import RegisterPage from './pages/RegisterPage';
 import WritePage from './pages/WritePage';
 import ProfilePage from './pages/ProfilePage';
 import ProfileEditPage from './pages/ProfileEditPage';
-
-import { fetchUser } from './modules/auth';
+import * as authAPI from './api/auth';
 
 function App() {
-  useLayoutEffect(() => {
-    fetchUser();
-  }, []);
+  // const [init, setInit] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // useLayoutEffect(() => {
+  //   authAPI.fetchUser();
+  // }, []);
 
   return (
     <>
@@ -29,4 +30,4 @@ function App() {
   );
 }
 
-export default connect(null, { fetchUser })(App);
+export default connect(null, {})(App);
