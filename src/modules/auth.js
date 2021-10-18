@@ -33,13 +33,15 @@ export const logout = createRequestThunk(LOGOUT, authAPI.logout);
 // 초기상태값
 const initialState = {
   login: {
-    email: '',
+    username: '',
     password: '',
     authError: null,
   },
   register: {
-    email: '',
+    username: '',
     password: '',
+    emailAddress:'',
+    fullName:'',
     authError: null,
   },
 };
@@ -173,7 +175,21 @@ export default function auth(state = initialState, action) {
         ...state,
         authError: action.payload.error
       };
-
+    case REGISTER:
+      return {
+        ...state
+      };
+    case REGISTER_SUCCESS:
+      console.log(action.payload);
+      return {
+        ...state,
+        authError: action.payload.error
+      }
+    case REGISTER_FAILURE:
+      console.log(action.payload);
+      return {
+        ...state
+      };
 
     default:
       return state;

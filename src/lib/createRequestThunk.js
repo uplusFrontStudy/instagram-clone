@@ -12,7 +12,7 @@ export default function createRequestThunk(type, request) {
         type: SUCCESS,
         payload: response,
       }); // 요청 성공
-      // finishLoding
+      return response;
     } catch (error) {
       dispatch({
         type: FAILURE,

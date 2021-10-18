@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { changeField, initializeForm, login } from '../../modules/auth';
 import AuthForm from '../../components/auth/AuthForm';
+import * as ROUTES from '../../constants/routes';
 // import { check } from '../../modules/user';
 
 const LoginContainer = ({ history }) => {
@@ -29,24 +30,21 @@ const LoginContainer = ({ history }) => {
   // 폼 등록 이벤트 핸들러
   const onSubmit = (e) => {
     e.preventDefault();
-    const { email, password } = form;
+    const { emailAddress, password } = form;
 
     // 유효성검사 추후 분리
-    if (!email || !password) {
+    if (!emailAddress || !password) {
       alert('이메일주소와 비밀번호를 입력해주세요.');
       return false;
     }
 
-    console.log(password);
-    dispatch(login({ email, password }))
-      .then(() => {
-        alert('Login successful');
-        history.push('/');
-      })
-      .catch((error) => {
-        alert('Login failed');
-        // console.error(error);
-      });
+    try {
+      dispatch(login({ emailAddress, password }));
+      history.push(ROUTES.DASHBOARD);
+    } catch (error) {
+      console.log(error);
+      setError(error.message);
+    }
   };
 
   // 컴포넌트가 처음 렌더링 될 때 form 을 초기화함

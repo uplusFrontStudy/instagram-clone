@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palettes';
 import Button from '../common/Button';
-
+import * as ROUTES from '../../constants/routes';
 import LogoImage from '../../../src/images/32f0a4f27407.png';
+import { Link } from 'react-router-dom';
 
 const AuthFormBlock = styled.div`
 	h3{
@@ -58,17 +59,37 @@ const AuthForm = ({ type, form, onChange, onSubmit }) => {
       <Logo />
       <form onSubmit={onSubmit}>
         <StyledInput
-          aria-label="전화번호, 사용자 이름 또는 이메일"
+          aria-label="이메일주소"
           aria-required="true"
+          placeholder="이메일주소"
           maxlength="75"
-          name="email"
+          name="username"
           onChange={onChange}
           type="text"
-          value={form.email}
+          value={form.emailAddress}
+        />
+        <StyledInput
+          aria-label="성명"
+          aria-required="true"
+          placeholder="성명"
+          name="fullName"
+          type="text"
+          onChange={onChange}
+          value={form.fullName}
+        />
+        <StyledInput
+          aria-label="사용자 이름"
+          aria-required="true"
+          placeholder="사용자 이름"
+          name="username"
+          type="text"
+          onChange={onChange}
+          value={form.username}
         />
         <StyledInput
           aria-label="비밀번호"
           aria-required="true"
+          placeholder="비밀번호"
           name="password"
           type="password"
           onChange={onChange}
@@ -83,6 +104,15 @@ const AuthForm = ({ type, form, onChange, onSubmit }) => {
         <div />
         <div>또는</div>
         <div />
+        <div>페이스북 로그인</div>
+        <div className="flex justify-center items-center flex-col w-full bg-white p-4 rounded border border-gray-primary">
+          <p className="text-sm">
+            계정이 없으신가요?{` `}
+            <Link to={ROUTES.SIGN_UP} className="font-bold text-blue-medium">
+              회원가입
+            </Link>
+          </p>
+        </div>
       </div>
     </AuthFormBlock>
   );
