@@ -2,15 +2,12 @@ import React, { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import Write from '../components/post/Write';
-import { changeField, initialize, writePost } from '../modules/write';
+import { changeField, initialize } from '../modules/write';
 
 const WriteContainer = () => {
   const dispath = useDispatch();
-  const { images, content, post, postError } = useSelector(({ write }) => ({
-    images: write.images,
+  const { content } = useSelector(({ write }) => ({
     content: write.content,
-    post: write.post,
-    postError: write.postError,
   }));
 
   const onChangeField = useCallback(
@@ -20,30 +17,14 @@ const WriteContainer = () => {
     [dispath],
   );
 
-  const onPublish = (e) => {
-    e.preventDefault();
-    dispath(
-      writePost({
-        content,
-        images,
-      }),
-    );
-  };
-
+  //언마운트될 때 초기화
   useEffect(() => {
     return () => {
       dispath(initialize());
     };
   }, [dispath]);
 
-  return (
-    <Write
-      onChangeField={onChangeField}
-      onPublish={onPublish}
-      images={images}
-      content={content}
-    />
-  );
+  return <Write onChangeField={onChangeField} content={content} />;
 };
 
 export default WriteContainer;

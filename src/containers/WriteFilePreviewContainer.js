@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import FilePreview from '../components/post/FilePreview';
@@ -7,34 +7,29 @@ import { changeField } from '../modules/write';
 
 const WriteFilePreviewContainer = () => {
   const dispatch = useDispatch();
-  const { psotImages } = useSelector(({ write }) => ({
-    psotImages: write.psotImages,
+  const { postImages } = useSelector(({ write }) => ({
+    postImages: write.postImages,
   }));
 
-  const [localPostImages, setLocalPostImages] = useState([]);
-
-  const onChangeImages = (newFiles) => {
-    console.log(newFiles);
-    setLocalPostImages(newFiles);
-    dispatch(
-      changeField({
-        key: 'postImages',
-        value: newFiles,
-      }),
-    );
-  };
-
-  useEffect(() => {
-    setLocalPostImages(psotImages);
-  }, [psotImages]);
+  const onChangeImages = useCallback(
+    (newFiles) => {
+      dispatch(
+        changeField({
+          key: 'postImages',
+          value: newFiles,
+        }),
+      );
+    },
+    [dispatch],
+  );
 
   return (
-    <FilePreview psotImages={localPostImages}>
+    <FilePreview postImages={postImages} onChangeImages={onChangeImages}>
       <FileUpload
         accept=".jpg,.png,.jpeg"
         multiple
         onChangeImages={onChangeImages}
-        images={psotImages}
+        images={postImages}
       />
     </FilePreview>
   );

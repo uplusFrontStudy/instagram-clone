@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 export const FileUploadContainer = styled.section`
@@ -52,39 +52,53 @@ const convertNestedObjectToArray = (nestedObj) =>
 const DEFAULT_MAX_FILE_SIZE_IN_BYTES = 500000;
 
 export default function FileUpload({
-  updateFilesCb,
   onChangeImages,
   images,
   maxFileSizeInBytes = DEFAULT_MAX_FILE_SIZE_IN_BYTES,
   ...otherProps
 }) {
-  const [files, setFilse] = useState({});
+  const [files, setFiles] = useState([]);
+  const [localFiles, setLocalFiles] = useState([]);
 
-  const addNewFiles = (newFiles) => {
-    for (let file of newFiles) {
-      if (file.size <= maxFileSizeInBytes) {
-        if (!otherProps.multiple) {
-          return { file };
+  //파일 사이즈 체크 및 등등
+  const addNewFiles = useCallback(
+    (newFiles) => {
+      let tempArray = [];
+      for (let file of newFiles) {
+        if (file.size <= maxFileSizeInBytes) {
+          tempArray.push(file);
         }
-        files[file.name] = file;
       }
-    }
-    return { ...files };
-  };
 
-  const insertFile = (files) => {
-    const filesAsArray = convertNestedObjectToArray(files);
-    onChangeImages(filesAsArray);
-  };
+      return localFiles.concat(tempArray);
+    },
+    [maxFileSizeInBytes, localFiles],
+  );
 
-  const handleNewFileUpload = (e) => {
-    const { files: newFiles } = e.target;
-    if (newFiles.length) {
-      let addFiles = addNewFiles(newFiles);
-      setFilse(addFiles);
-      insertFile(addFiles);
-    }
-  };
+  const insertFile = useCallback(
+    (files) => {
+      onChangeImages(files);
+    },
+    [onChangeImages],
+  );
+
+  const handleNewFileUpload = useCallback(
+    (e) => {
+      const { files: newFiles } = e.target;
+
+      if (newFiles.length) {
+        const addFiles = addNewFiles(newFiles);
+        setLocalFiles(addFiles);
+        insertFile(addFiles);
+      }
+    },
+    [addNewFiles, insertFile],
+  );
+
+  useEffect(() => {
+    console.log('FileUload');
+    setLocalFiles(images);
+  }, [images]);
 
   return (
     <>
@@ -92,12 +106,13 @@ export default function FileUpload({
         <FormField type="file" onChange={handleNewFileUpload} {...otherProps} />
         {files &&
           !otherProps.multiple &&
-          Object.keys(files).map((filename) => {
+          Object.keys(files).map((filename, index) => {
             let file = files[filename];
             return (
               <CoverPreviewImage
                 src={URL.createObjectURL(file)}
                 alt="coverImage"
+                key={index}
               ></CoverPreviewImage>
             );
           })}

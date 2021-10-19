@@ -40,6 +40,7 @@ const Write = ({ onChangeField, content }) => {
         placeholder="문구 입력..."
         rows="3"
         onChange={onChangeContent}
+        value={content}
       ></Textarea>
     </>
   );

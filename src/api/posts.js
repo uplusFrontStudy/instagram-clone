@@ -4,39 +4,37 @@ const { getFirestore, getDocs, collection, addDoc } = firestore;
 const { getStorage, ref, uploadBytesResumable, getDownloadURL } =
   firebaseStorage;
 
-const uploader = (images) => {
+export const uploader = async (images) => {
   const imageUrl = [];
+  const storage = getStorage();
 
-  Object.keys(images).forEach((name) => {
-    let file = images[name];
-    const storageRef = ref(getStorage(), `posts/ ${file.name}`);
-    uploadBytesResumable(storageRef, file)
-      .then((snapshot) => {
-        getDownloadURL(snapshot.ref).then((url) => {
-          imageUrl.push(url);
-        });
-      })
-      .catch((error) => {
-        console.error('Upload failed', error);
-      });
-  });
+  for (const image of images) {
+    let storageRef = ref(storage, `posts/${image.name}`);
+    //파일 업로드
+    await uploadBytesResumable(storageRef, image);
+    //파일 다운로드 URL
+    let downloadUrl = await getDownloadURL(storageRef);
 
+    imageUrl.push(downloadUrl);
+  }
   return imageUrl;
 };
 
-export async function writePost({ content, images }) {
-  const imageUrl = uploader(images);
+export const writePost = async ({ content, coverImage, postImages }) => {
+  const coverImageUrl = await uploader(coverImage);
+  const postImagesUrl = await uploader(postImages);
 
   try {
-    await addDoc(collection(getFirestore(), 'posts'), {
+    return await addDoc(collection(getFirestore(), 'posts'), {
       content: content,
-      images: imageUrl,
+      coverImageUrl: coverImageUrl,
+      postImagesUrl: postImagesUrl,
       createAt: Date.now(),
     });
   } catch (e) {
     console.error('Error adding document: ', e);
   }
-}
+};
 
 export async function listPosts() {
   const response = [];

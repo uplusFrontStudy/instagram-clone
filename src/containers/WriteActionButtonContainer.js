@@ -6,19 +6,23 @@ import { writePost } from '../modules/write';
 
 const WriteActionButtonContainer = ({ history }) => {
   const dispatch = useDispatch();
-  const { images, content, post, postError } = useSelector(({ write }) => ({
-    images: write.images,
-    content: write.content,
-    post: write.post,
-    postError: write.postError,
-  }));
+  const { coverImage, postImages, content, post, postError } = useSelector(
+    ({ write }) => ({
+      coverImage: write.coverImage,
+      postImages: write.postImages,
+      content: write.content,
+      post: write.post,
+      postError: write.postError,
+    }),
+  );
 
   const onPublish = (e) => {
     e.preventDefault();
     dispatch(
       writePost({
         content,
-        images,
+        coverImage,
+        postImages,
       }),
     );
   };
@@ -29,7 +33,8 @@ const WriteActionButtonContainer = ({ history }) => {
 
   useEffect(() => {
     if (post) {
-      const { id, user } = post;
+      const { _id, user } = post;
+      console.log(_id);
       history.push(`/`);
     }
 
