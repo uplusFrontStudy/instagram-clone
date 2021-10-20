@@ -25,12 +25,12 @@ const WriteFilePreviewContainer = () => {
 
   return (
     <FilePreview postImages={postImages} onChangeImages={onChangeImages}>
-      <FileUpload
+      {/*  <FileUpload
         accept=".jpg,.png,.jpeg"
         multiple
         onChangeImages={onChangeImages}
         images={postImages}
-      />
+      /> */}
     </FilePreview>
   );
 };

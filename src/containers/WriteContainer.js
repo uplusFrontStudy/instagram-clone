@@ -5,24 +5,24 @@ import Write from '../components/post/Write';
 import { changeField, initialize } from '../modules/write';
 
 const WriteContainer = () => {
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
   const { content } = useSelector(({ write }) => ({
     content: write.content,
   }));
 
   const onChangeField = useCallback(
     (paylod) => {
-      dispath(changeField(paylod));
+      dispatch(changeField(paylod));
     },
-    [dispath],
+    [dispatch],
   );
 
   //언마운트될 때 초기화
   useEffect(() => {
     return () => {
-      dispath(initialize());
+      dispatch(initialize());
     };
-  }, [dispath]);
+  }, [dispatch]);
 
   return <Write onChangeField={onChangeField} content={content} />;
 };

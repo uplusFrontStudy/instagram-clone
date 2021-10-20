@@ -14,7 +14,7 @@ const Label = styled.label`
 const Textarea = styled.textarea`
   width: 80%;
   background-color: transparent;
-  border: 1px solid #262626;
+  border: 1px solid #efefef;
   border-radius: 6px;
   padding: 7px;
   color: #262626;

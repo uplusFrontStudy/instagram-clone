@@ -4,29 +4,26 @@ import { useDispatch } from 'react-redux';
 import FileUpload from '../components/post/FileUpload';
 import { changeField } from '../modules/write';
 
-const WriteFileUploadContainer = () => {
+const WriteFileUploadContainer = ({ name, ...otherProps }) => {
   const dispatch = useDispatch();
-  const { coverImage } = useSelector(({ write }) => ({
+  const { coverImage, postImages } = useSelector(({ write }) => ({
     coverImage: write.coverImage,
+    postImages: write.postImages,
   }));
 
   const onChangeImages = useCallback(
-    (newFiles) => {
-      dispatch(
-        changeField({
-          key: 'coverImage',
-          value: newFiles,
-        }),
-      );
+    (paylod) => {
+      dispatch(changeField(paylod));
     },
     [dispatch],
   );
 
   return (
     <FileUpload
-      accept=".jpg,.png,.jpeg"
+      name={name}
       onChangeImages={onChangeImages}
-      images={coverImage}
+      images={name === 'coverImage' ? coverImage : postImages}
+      {...otherProps}
     />
   );
 };

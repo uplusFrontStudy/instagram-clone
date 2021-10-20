@@ -34,7 +34,6 @@ const WriteActionButtonContainer = ({ history }) => {
   useEffect(() => {
     if (post) {
       const { _id, user } = post;
-      console.log(_id);
       history.push(`/`);
     }
 

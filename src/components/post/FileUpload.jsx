@@ -46,18 +46,15 @@ export const DragDropText = styled.p`
   line-height: 24px;
   margin-bottom: 12px;
 `;
-const convertNestedObjectToArray = (nestedObj) =>
-  Object.keys(nestedObj).map((key) => nestedObj[key]);
-
 const DEFAULT_MAX_FILE_SIZE_IN_BYTES = 500000;
 
 export default function FileUpload({
+  name,
   onChangeImages,
   images,
   maxFileSizeInBytes = DEFAULT_MAX_FILE_SIZE_IN_BYTES,
   ...otherProps
 }) {
-  const [files, setFiles] = useState([]);
   const [localFiles, setLocalFiles] = useState([]);
 
   //파일 사이즈 체크 및 등등
@@ -66,20 +63,26 @@ export default function FileUpload({
       let tempArray = [];
       for (let file of newFiles) {
         if (file.size <= maxFileSizeInBytes) {
+          if (!otherProps.multiple) {
+            return [file];
+          }
           tempArray.push(file);
         }
       }
 
       return localFiles.concat(tempArray);
     },
-    [maxFileSizeInBytes, localFiles],
+    [maxFileSizeInBytes, localFiles, otherProps.multiple],
   );
 
   const insertFile = useCallback(
     (files) => {
-      onChangeImages(files);
+      onChangeImages({
+        key: name,
+        value: files,
+      });
     },
-    [onChangeImages],
+    [onChangeImages, name],
   );
 
   const handleNewFileUpload = useCallback(
@@ -96,7 +99,6 @@ export default function FileUpload({
   );
 
   useEffect(() => {
-    console.log('FileUload');
     setLocalFiles(images);
   }, [images]);
 
@@ -104,14 +106,14 @@ export default function FileUpload({
     <>
       <FileUploadContainer>
         <FormField type="file" onChange={handleNewFileUpload} {...otherProps} />
-        {files &&
+        {localFiles &&
           !otherProps.multiple &&
-          Object.keys(files).map((filename, index) => {
-            let file = files[filename];
+          Object.keys(localFiles).map((index) => {
+            let file = localFiles[index];
             return (
               <CoverPreviewImage
                 src={URL.createObjectURL(file)}
-                alt="coverImage"
+                alt="image"
                 key={index}
               ></CoverPreviewImage>
             );

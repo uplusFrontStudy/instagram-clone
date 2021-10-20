@@ -1,6 +1,5 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import plusImg from '../../images/plus.png';
 import deleteImg from '../../images/delete.png';
 
 const FilePreviewContainer = styled.article`
@@ -14,8 +13,7 @@ const PreviewList = styled.section`
 `;
 
 const FileMetaData = styled.div`
-  // display: ${(props) => (props.isImageFile ? 'none' : 'flex')};
-  display: flex;
+  display: ${(props) => (props.isImageFile ? 'none' : 'flex')};
   flex-direction: column;
   position: absolute;
   align-items: center;
@@ -69,31 +67,13 @@ const ImagePreview = styled.img`
   overflow: hidden;
 `;
 
-const FileUploadBtn = styled.div`
-  position: relative;
-  width: 62px;
-  height: 100%;
-  margin-left: 10px;
-  cursor: pointer;
-`;
-
-const Image = styled.img`
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  margin: auto;
-`;
-
-const PreviewItem = React.memo(({ file, onRemove }) => (
+const PreviewItem = React.memo(({ file, isImageFile, onRemove }) => (
   <>
     <ImagePreview
       src={URL.createObjectURL(file)}
       alt={`file preview ${file.name}`}
     />
-    <FileMetaData isImageFile={true}>
+    <FileMetaData isImageFile={isImageFile}>
       <RemoveFileIcon onClick={() => onRemove(file.name)}>
         <img src={deleteImg} alt="delete" />
       </RemoveFileIcon>
@@ -105,14 +85,19 @@ const PreviewItem = React.memo(({ file, onRemove }) => (
 const Preview = React.memo(({ images, onRemove }) => (
   <>
     {Object.keys(images).map((fileName) => {
-      console.log(images);
       let file = images[fileName];
       let isImageFile = file.type.split('/')[0] === 'image';
 
       return (
         <PreviewContainer key={fileName}>
           <div>
-            {isImageFile && <PreviewItem file={file} onRemove={onRemove} />}
+            {isImageFile && (
+              <PreviewItem
+                file={file}
+                isImageFile={isImageFile}
+                onRemove={onRemove}
+              />
+            )}
           </div>
         </PreviewContainer>
       );
@@ -120,7 +105,7 @@ const Preview = React.memo(({ images, onRemove }) => (
   </>
 ));
 
-const FilePreview = ({ onChangeImages, postImages, children }) => {
+const FilePreview = ({ onChangeImages, postImages }) => {
   const [localPostImages, setLocalPostImages] = useState([]);
 
   const onRemove = useCallback(
@@ -136,7 +121,6 @@ const FilePreview = ({ onChangeImages, postImages, children }) => {
 
   //postImages가 바뀔 때
   useEffect(() => {
-    console.log('FilePreview');
     setLocalPostImages(postImages);
   }, [postImages]);
 
@@ -144,10 +128,6 @@ const FilePreview = ({ onChangeImages, postImages, children }) => {
     <FilePreviewContainer>
       <PreviewList>
         {postImages && <Preview images={localPostImages} onRemove={onRemove} />}
-        <FileUploadBtn>
-          {children}
-          <Image src={plusImg} alt="plus" />
-        </FileUploadBtn>
       </PreviewList>
     </FilePreviewContainer>
   );

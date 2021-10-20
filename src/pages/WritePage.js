@@ -6,6 +6,7 @@ import WriteActionButtonContainer from '../containers/WriteActionButtonContainer
 import WriteContainer from '../containers/WriteContainer';
 import WriteFilePreviewContainer from '../containers/WriteFilePreviewContainer';
 import WriteFileUploadContainer from '../containers/WriteFileUploadContainer';
+import plusImg from '../images/plus.png';
 
 const WriteLayout = styled(Responsive)`
   margin: 60px auto 0;
@@ -55,6 +56,24 @@ const Label = styled.label`
   margin-bottom: 10px;
 `;
 
+const FileUploadBtn = styled.div`
+  position: relative;
+  width: 62px;
+  height: 100%;
+  margin-left: 10px;
+  cursor: pointer;
+`;
+
+const Image = styled.img`
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+`;
+
 function WritePage() {
   return (
     <>
@@ -62,13 +81,24 @@ function WritePage() {
       <WriteLayout>
         <WriteInner>
           <PostCoverImage>
-            <WriteFileUploadContainer />
+            <WriteFileUploadContainer
+              name="coverImage"
+              accept=".jpg,.png,.jpeg"
+            />
           </PostCoverImage>
           <PostContent>
-            <Title> 새 피트 추가하기</Title>
+            <Title> 새 피드 추가하기</Title>
             <Label>이미지 업로드</Label>
             <PostPreView>
               <WriteFilePreviewContainer />
+              <FileUploadBtn>
+                <WriteFileUploadContainer
+                  name="postImages"
+                  accept=".jpg,.png,.jpeg"
+                  multiple
+                />
+                <Image src={plusImg} alt="plus" />
+              </FileUploadBtn>
             </PostPreView>
             <WriteContainer />
             <WriteActionButtonContainer />
