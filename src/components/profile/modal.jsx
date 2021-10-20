@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { storage } from '../../firebase';
 
-const Modal = (props) => {
+const Modal = ({trigger, setTrigger, onUpload, onDelete, user}) => {
+    
     const inputRef = useRef();
 
     const onInputClick = event => {
@@ -10,27 +10,28 @@ const Modal = (props) => {
         inputRef.current.click();
     };
 
-    const onProfileUpload = event => {
-
+    async function uploadProfile(event) {
         const file = event.target.files[0];
-
-        const storageRef = storage.ref();
-        const fileRef = storageRef.child(file.name);
-        fileRef.put(file).then(()=>{
-            // 이미지 바꾸기.......ㅜㅜ
-        });
-
+        onUpload(file, user);
+        setTrigger(false);
     };
 
-    return (props.trigger) ? (
+    async function deleteProfile(event) {
+        
+        onDelete(user);
+        setTrigger(false);
+    };
+
+
+    return (trigger) ? (
         <ModalContainer>
             <ModalInner>
                 <ModalTitle>프로필 사진 바꾸기</ModalTitle>
                 
-                <FileInput ref={inputRef} type="file" accept="image/*" name="profile" onChange={onProfileUpload}/>
+                <FileInput ref={inputRef} type="file" accept="image/*" name="profile" onChange={uploadProfile}/>
             <ColorButton red onClick={onInputClick}>사진 업로드</ColorButton>
-                <ColorButton blue>현재 사진 삭제</ColorButton>
-                <Button onClick={() => props.setTrigger (false)}>취소</Button>                
+                <ColorButton blue onClick={deleteProfile}>현재 사진 삭제</ColorButton>
+                <Button onClick={() => setTrigger(false)}>취소</Button>                
             </ModalInner>
         </ModalContainer>
 

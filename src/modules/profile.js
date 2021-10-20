@@ -1,65 +1,64 @@
-import { handleActions } from 'redux-actions';
 import * as api from '../api/profile';
+import createRequestThunk from '../lib/createRequestThunk';
 
-// 1. 액션 타입 정의
-const GET_PROFILE_IMAGE = 'profile/GET_PROFILE_IMAGE';
-const GET_PROFILE_IMAGE_SUCCESS = 'profile/GET_PROFILE_IMAGE_SUCCESS';
-const GET_PROFILE_IMAGE_FAIL = 'profile/GET_PROFILE_IMAGE_FAIL';
+// 액션 타입 선언
+const GET_USER = 'profile/GET_USER';
+const GET_USER_SUCCESS = 'profile/GET_USER_SUCCESS';
 
-// 2. thunk 함수를 생성한다.
-//    👉 thunk 함수 내부는 시작, 성공, 실패 했을 때 다른 액션을 dispatch 한다!
-export const getProfileImage = (id) => async (dispatch) => {
-  dispatch({ type: GET_PROFILE_IMAGE }); // 요청을 시작한 것을 알림
-  try {
-    const reponse = await api.getProfileImage();
-    dispatch({
-      type: GET_PROFILE_IMAGE_SUCCESS,
-      payload: reponse,
-    }); // 요청 성공
-  } catch (e) {
-    dispatch({
-      type: GET_PROFILE_IMAGE_FAIL,
-      payload: e,
-      error: true,
-    }); // 에러 발생
-    throw e; // 나중에 컴포넌트 단에서 에러를 조회할 수 있게 해 줌
-  }
-};
+const UPDATE_USER = 'profile/UPDATE_USER';
+const UPDATE_USER_SUCCESS = 'profile/UPDATE_USER_SUCCESS';
 
-// 초기 state를 선언
+const UPLOAD_IMAGE = 'profile/UPLOAD_IMAGE';
+const UPLOAD_IMAGE_SUCCESS = 'profile/UPLOAD_IMAGE_SUCCESS';
+
+const DELETE_IMAGE = 'profile/DELETE_IMAGE';
+const DELETE_IMAGE_SUCCESS = 'profile/DELETE_IMAGE_SUCCESS';
+
+// thunk 함수 생성 => 함수 내부에서 시작, 성공, 실패 했을 때 다른 액션을 디스패치 함
+export const getUser = createRequestThunk(GET_USER, api.getUser);
+export const updateUser = createRequestThunk(UPDATE_USER, api.updateUser);
+export const uploadImage = createRequestThunk(UPLOAD_IMAGE, api.uploadImage);
+export const deleteImage = createRequestThunk(DELETE_IMAGE, api.deleteImage);
+
+// 초기 상태 선언, 로딩 상태는 loading 이라는 객체에서 관리함
 const initalState = {
-  loding: {
-    GET_PROFILE_IMAGE: false,
-  },
-  profileImage: null,
+  user: null,
+  error: null,
 };
 
-const sample = handleActions(
-  {
-    [GET_PROFILE_IMAGE]: (state) => ({
-      ...state,
-      loading: {
-        ...state.loading,
-        GET_PROFILE_IMAGE: true, // 요청 시작
-      },
-    }),
-    [GET_PROFILE_IMAGE_SUCCESS]: (state, action) => ({
-      ...state,
-      loading: {
-        ...state.loading,
-        GET_PROFILE_IMAGE: false, // 요청 완료
-      },
-      profileImage: action.payload,
-    }),
-    [GET_PROFILE_IMAGE_FAIL]: (state, action) => ({
-      ...state,
-      loading: {
-        ...state.loading,
-        GET_PROFILE_IMAGE: false, // 요청 완료
-      },
-    }),
-  },
-  initalState,
-);
+// 리듀서 생성
+export default function profile(state = initalState, action) {
+  switch (action.type) {
+    case GET_USER_SUCCESS:
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case UPDATE_USER_SUCCESS:
+      return {
+        ...state,
+        user: action.payload,
+      };
 
-export default sample;
+    case UPLOAD_IMAGE_SUCCESS:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          profileURL: action.payload.profileURL,
+          profileName: action.payload.profileName,
+        },
+      };
+    case DELETE_IMAGE_SUCCESS:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          profileURL: null,
+          profileName: null,
+        },
+      };
+    default:
+      return state;
+  }
+}
