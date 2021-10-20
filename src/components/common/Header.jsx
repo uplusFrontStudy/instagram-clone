@@ -15,7 +15,6 @@ const HeaderBlock = styled.div`
 
 const Wrapper = styled(Responsive)`
   height: 54px;
-  display: flex;
   flex-direction: row;
   padding: 0 20px;
   align-items: center;
@@ -38,6 +37,11 @@ const Wrapper = styled(Responsive)`
     }
   }
 `;
+
+const Spacer = styled.div`
+  margin-top: 54px;
+`;
+
 const Header = ({ logout, history }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   useLayoutEffect(() => {
@@ -151,6 +155,7 @@ const Header = ({ logout, history }) => {
           </div>
         </Wrapper>
       </HeaderBlock>
+      <Spacer />
     </>
   );
 };
