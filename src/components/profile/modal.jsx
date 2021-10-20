@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
 
-const Modal = ({trigger, setTrigger, upload}) => {
+const Modal = ({trigger, setTrigger, onUpload, onDelete, user}) => {
+    
     const inputRef = useRef();
 
     const onInputClick = event => {
@@ -9,21 +10,27 @@ const Modal = ({trigger, setTrigger, upload}) => {
         inputRef.current.click();
     };
 
-    function onProfileUpload(event) {
+    async function uploadProfile(event) {
         const file = event.target.files[0];
-        upload(file, 'idid');
-        console.log('upload=',file)
+        onUpload(file, user);
         setTrigger(false);
     };
+
+    async function deleteProfile(event) {
+        
+        onDelete(user);
+        setTrigger(false);
+    };
+
 
     return (trigger) ? (
         <ModalContainer>
             <ModalInner>
                 <ModalTitle>프로필 사진 바꾸기</ModalTitle>
                 
-                <FileInput ref={inputRef} type="file" accept="image/*" name="profile" onChange={onProfileUpload}/>
+                <FileInput ref={inputRef} type="file" accept="image/*" name="profile" onChange={uploadProfile}/>
             <ColorButton red onClick={onInputClick}>사진 업로드</ColorButton>
-                <ColorButton blue>현재 사진 삭제</ColorButton>
+                <ColorButton blue onClick={deleteProfile}>현재 사진 삭제</ColorButton>
                 <Button onClick={() => setTrigger(false)}>취소</Button>                
             </ModalInner>
         </ModalContainer>

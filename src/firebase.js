@@ -1,6 +1,7 @@
 import * as firebase from 'firebase/app';
 import * as firebaseAuth from 'firebase/auth';
 import * as firestore from 'firebase/firestore';
+import * as storage from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -18,4 +19,4 @@ const getAuthenticationStatus = () => {
   return localStorage.getItem('isAuthenticated');
 };
 
-export { firebase, firestore, firebaseAuth, getAuthenticationStatus };
+export { firebase, firestore, firebaseAuth, getAuthenticationStatus, storage };

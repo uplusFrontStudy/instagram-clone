@@ -1,11 +1,13 @@
 import React from 'react';
-import ProfileContainer from '../containers/ProfileContainer';
+import ProfileContainer from '../containers/profile/ProfileContainer';
 import PostListContainer from '../containers/PostListContainer';
 
-function ProfilePage({ FileInput }) {
+function ProfilePage({ match }) {
+  const userId = match.params.userid;
+
   return (
     <>
-      <ProfileContainer />
+      <ProfileContainer userId={userId} />
       <PostListContainer />
     </>
   );

@@ -1,133 +1,61 @@
-import * as ProfileAPI from '../api/profile';
+import * as api from '../api/profile';
 import createRequestThunk from '../lib/createRequestThunk';
 
-const GET_USER_DATA = 'profile/GET_USER_DATA';
-const GET_USER_DATA_SUCCESS = 'profile/GET_USER_DATA_SUCCESS';
-const GET_USER_DATA_FAILURE = 'profile/GET_USER_DATA_FAILURE';
+// 액션 타입 선언
+const GET_USER = 'profile/GET_USER';
+const GET_USER_SUCCESS = 'profile/GET_USER_SUCCESS';
 
-const UPDATE_USER_DATA = 'profile/UPDATE_USER_DATA';
-const UPDATE_USER_DATA_SUCCESS = 'profile/UPDATE_USER_DATA_SUCCESS';
-const UPDATE_USER_DATA_FAILURE = 'profile/UPDATE_USER_DATA_FAILURE';
+const UPDATE_USER = 'profile/UPDATE_USER';
+const UPDATE_USER_SUCCESS = 'profile/UPDATE_USER_SUCCESS';
 
-const GET_PROFILE_IMAGE = 'profile/GET_PROFILE_IMAGE';
-const GET_PROFILE_IMAGE_SUCCESS = 'profile/GET_PROFILE_IMAGE_SUCCESS';
-const GET_PROFILE_IMAGE_FAILURE = 'profile/GET_PROFILE_IMAGE_FAILURE';
+const UPLOAD_IMAGE = 'profile/UPLOAD_IMAGE';
+const UPLOAD_IMAGE_SUCCESS = 'profile/UPLOAD_IMAGE_SUCCESS';
 
-const UPLOAD_PROFILE_IMAGE = 'profile/UPLOAD_PROFILE_IMAGE';
-const UPLOAD_PROFILE_IMAGE_SUCCESS = 'profile/UPLOAD_PROFILE_IMAGE_SUCCESS';
-const UPLOAD_PROFILE_IMAGE_FAILURE = 'profile/UPLOAD_PROFILE_IMAGE_FAILURE';
+const DELETE_IMAGE = 'profile/DELETE_IMAGE';
+const DELETE_IMAGE_SUCCESS = 'profile/DELETE_IMAGE_SUCCESS';
 
-export const getUserData = createRequestThunk(
-  GET_USER_DATA,
-  ProfileAPI.getUserData,
-);
+// thunk 함수 생성 => 함수 내부에서 시작, 성공, 실패 했을 때 다른 액션을 디스패치 함
+export const getUser = createRequestThunk(GET_USER, api.getUser);
+export const updateUser = createRequestThunk(UPDATE_USER, api.updateUser);
+export const uploadImage = createRequestThunk(UPLOAD_IMAGE, api.uploadImage);
+export const deleteImage = createRequestThunk(DELETE_IMAGE, api.deleteImage);
 
-export const updateUserData = createRequestThunk(
-  UPDATE_USER_DATA,
-  ProfileAPI.getUserData,
-);
-
-export const getProfileImage = createRequestThunk(
-  GET_PROFILE_IMAGE,
-  ProfileAPI.getProfileImage,
-);
-
-export const uploadProfileImage = createRequestThunk(
-  UPLOAD_PROFILE_IMAGE,
-  ProfileAPI.uploadProfileImage,
-);
-
+// 초기 상태 선언, 로딩 상태는 loading 이라는 객체에서 관리함
 const initalState = {
-  loading: {
-    GET_USER_DATA: false,
-    UPDATE_USER_DATA: false,
-    GET_PROFILE_IMAGE: false,
-    UPLOAD_PROFILE_IMAGE: false,
-  },
-  user: [],
-  profileImage: null,
+  user: null,
+  error: null,
 };
 
 // 리듀서 생성
 export default function profile(state = initalState, action) {
   switch (action.type) {
-    // 회원 정보 가져오기
-    case GET_USER_DATA:
+    case GET_USER_SUCCESS:
       return {
         ...state,
-        loading: {
-          ...state.loading,
-          GET_USER_DATA: true, // 요청 시작
-        },
-      };
-    case GET_USER_DATA_SUCCESS:
-      return {
-        ...state,
-        loading: {
-          ...state.loading,
-          GET_USER_DATA: false, // 요청 완료
-        },
         user: action.payload,
       };
-    case GET_USER_DATA_FAILURE:
+    case UPDATE_USER_SUCCESS:
       return {
         ...state,
-        loading: {
-          ...state.loading,
-          GET_USER_DATA: false, // 요청 실패
-        },
+        user: action.payload,
       };
 
-    // 회원 프로필 이미지 가져오기
-    case GET_PROFILE_IMAGE:
+    case UPLOAD_IMAGE_SUCCESS:
       return {
         ...state,
-        loading: {
-          ...state.loading,
-          GET_PROFILE_IMAGE: true, // 요청 시작
+        user: {
+          ...state.user,
+          profileURL: action.payload.profileURL,
+          profileName: action.payload.profileName,
         },
       };
-    case GET_PROFILE_IMAGE_SUCCESS:
+    case DELETE_IMAGE_SUCCESS:
       return {
         ...state,
-        loading: {
-          ...state.loading,
-          GET_PROFILE_IMAGE: false, // 요청 완료
-        },
-        profileImage: action.payload,
-      };
-    case GET_PROFILE_IMAGE_FAILURE:
-      return {
-        ...state,
-        loading: {
-          ...state.loading,
-          GET_PROFILE_IMAGE: false, // 요청 실패
-        },
-      };
-
-    case UPLOAD_PROFILE_IMAGE:
-      return {
-        ...state,
-        loading: {
-          ...state.loading,
-          GET_PROFILE_IMAGE: true, // 요청 시작
-        },
-      };
-    case UPLOAD_PROFILE_IMAGE_SUCCESS:
-      return {
-        ...state,
-        loading: {
-          ...state.loading,
-          GET_PROFILE_IMAGE: false, // 요청 완료
-        },
-        profileImage: action.payload,
-      };
-    case UPLOAD_PROFILE_IMAGE_FAILURE:
-      return {
-        ...state,
-        loading: {
-          ...state.loading,
-          GET_PROFILE_IMAGE: false, // 요청 실패
+        user: {
+          ...state.user,
+          profileURL: null,
+          profileName: null,
         },
       };
     default:
