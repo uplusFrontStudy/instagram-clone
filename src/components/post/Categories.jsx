@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Responsive from './common/Responsive';
+import Responsive from '../common/Responsive';
 
 const categories = [
   {

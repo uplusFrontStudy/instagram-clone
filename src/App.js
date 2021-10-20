@@ -22,8 +22,8 @@ function App() {
       <Route component={PostListPage} path="/" exact />
       <Route component={LoginPage} path="/login" />
       <Route component={RegisterPage} path="/register" />
-      <Route component={ProfilePage} path="/profile" />
-      <Route component={ProfileEditPage} path="/profile/edit" />
+      <Route component={ProfilePage} path="/profile/:userid" />
+      <Route component={ProfileEditPage} path="/account/edits" />
       <Route component={WritePage} path="/write" />
       <Route component={PostPage} path="/:username/:postId" />
     </>

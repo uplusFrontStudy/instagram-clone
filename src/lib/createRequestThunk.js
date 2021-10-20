@@ -1,3 +1,5 @@
+/* import { finishLoading, startLoading } from '../modules/loading'; */
+
 export default function createRequestThunk(type, request) {
   // 1. 성공 및 실패 액션 타입 정의
   const SUCCESS = `${type}_SUCCESS`;
@@ -29,3 +31,28 @@ export default function createRequestThunk(type, request) {
 	  const getProfileImage = createRequestThunk('GET_PROFILE_IMAGE', getProfileImage)
 	  getProfileImage(params);
   */
+/* 
+  return (...args) =>
+    async (dispatch) => {
+      dispatch({ type }); //요청 시작
+      dispatch(startLoading(type));
+      try {
+        const response = await request(...args);
+        dispatch({
+          type: SUCCESS,
+          payload: response,
+        }); // 요청 성공
+        dispatch(finishLoading(type));
+      } catch (error) {
+        dispatch({
+          type: FAILURE,
+          payload: error,
+          error: true,
+        }); // 요청 실패 => 에러 발생
+        dispatch(startLoading(type));
+        throw error;
+      }
+    };
+} */
+
+// 사용법: createRequestThunk('GET_USER', api.getUser)

@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Categories from './Categories';
-import Header from './common/Header';
-import Responsive from './common/Responsive';
-import test from '../images/logo512.png';
+import Header from '../common/Header';
+import Responsive from '../common/Responsive';
+import test from '../../images/logo512.png';
 import { Link } from 'react-router-dom';
 
 const PostListBlock = styled(Responsive)`
@@ -52,37 +52,31 @@ const WritePostButtonWrapper = styled.div`
 
 const Article = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: 0 auto;
   padding-bottom: 0px;
   padding-top: 0px;
 `;
 
-const PostRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex: 1 0 0%;
-  margin-bottom: 28px;
-
-  @media (max-width: 735px) {
-    margin-bottom: 3px;
-  }
-`;
-
 const PostItem = styled.div`
-  display: block;
-  width: 100%;
-  border: 1px solid #999;
-  border-radius: 5px;
-  margin-right: 28px;
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  flex-basis: 33.33%;
+  padding-right: 28px;
+  padding-bottom: 28px;
+  box-sizing: border-box;
 
   @media (max-width: 735px) {
-    margin-right: 3px;
+    padding-right: 3px;
+    padding-bottom: 3px;
   }
 
   img {
+    border: 1px solid #999;
+    border-radius: 5px;
     height: 100%;
-    left: 0;
-    top: 0;
     width: 100%;
   }
 `;
@@ -90,7 +84,6 @@ const PostItem = styled.div`
 function PostList({ posts }) {
   return (
     <>
-      <Header />
       <Categories />
       <PostListBlock>
         <WritePostButtonWrapper>
@@ -99,28 +92,14 @@ function PostList({ posts }) {
           </Link>
         </WritePostButtonWrapper>
         <Article>
-          <PostRow>
-            <PostItem>
-              <img src={test} alt="test" />
-            </PostItem>
-            <PostItem>
-              <img src={test} alt="test" />
-            </PostItem>
-            <PostItem>
-              <img src={test} alt="test" />
-            </PostItem>
-          </PostRow>
-          <PostRow>
-            <PostItem>
-              <img src={test} alt="test" />
-            </PostItem>
-            <PostItem>
-              <img src={test} alt="test" />
-            </PostItem>
-            <PostItem>
-              <img src={test} alt="test" />
-            </PostItem>
-          </PostRow>
+          {posts &&
+            posts.map((post, i) => {
+              return (
+                <PostItem key={post.id}>
+                  <img src={post.postImages} alt="test" />
+                </PostItem>
+              );
+            })}
         </Article>
       </PostListBlock>
     </>

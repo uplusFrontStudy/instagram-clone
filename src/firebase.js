@@ -21,4 +21,11 @@ const getAuthenticationStatus = () => {
 
 const storage = firebaseStorage.getStorage();
 
-export { firebase, firestore, firebaseAuth, getAuthenticationStatus, storage };
+export {
+  firebase,
+  firestore,
+  firebaseAuth,
+  getAuthenticationStatus,
+  storage,
+  firebaseStorage,
+};
