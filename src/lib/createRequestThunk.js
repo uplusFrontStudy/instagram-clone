@@ -9,21 +9,21 @@ export default function createRequestThunk(type, request) {
   return (...args) =>
     async (dispatch) => {
       dispatch({ type }); //요청 시작
-      dispatch(startLoading(type));
+      //dispatch(startLoading(type));
       try {
         const response = await request(...args);
         dispatch({
           type: SUCCESS,
           payload: response,
         }); // 요청 성공
-        dispatch(finishLoading(type));
+        //dispatch(finishLoading(type));
       } catch (error) {
         dispatch({
           type: FAILURE,
           payload: error,
           error: true,
         }); // 요청 실패 => 에러 발생
-        dispatch(startLoading(type));
+        //dispatch(startLoading(type));
         throw error;
       }
     };

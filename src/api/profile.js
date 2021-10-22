@@ -15,6 +15,7 @@ export async function getUser(userId) {
 export async function updateUser(user) {
   const docRef = doc(getFirestore(), 'users', user.userId);
   await updateDoc(docRef, user);
+  return user;
 }
 
 export async function uploadImage(file, user) {
