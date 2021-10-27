@@ -10,12 +10,13 @@ import ProfileEditPage from './pages/ProfileEditPage';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
 import { setUser } from './modules/user';
+
 function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
     onAuthStateChanged(getAuth(), (authUser) => {
-      console.log(authUser);
+      console.log(`App : ${authUser}`);
       if (authUser) {
         localStorage.setItem('authUser', authUser['uid']);
         dispatch(setUser(authUser['uid']));

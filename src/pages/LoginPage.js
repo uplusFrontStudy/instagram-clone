@@ -4,7 +4,7 @@ import LoginContainer from '../containers/auth/LoginContainer';
 
 const LoginPage = () => {
   return (
-    <AuthTemplate>
+    <AuthTemplate type="login">
       <LoginContainer />
     </AuthTemplate>
   );

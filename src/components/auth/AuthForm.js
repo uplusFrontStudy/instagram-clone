@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Button from '../common/Button';
 import LogoImage from '../../../src/images/instagram_logo.png';
 import facebookIcon from '../../../src/images/icons.png';
@@ -8,6 +8,16 @@ const AuthFormBlock = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0 40px;
+
+  h2 {
+    color: #8e8e8e;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
 `;
 
 const Logo = styled.img`
@@ -30,7 +40,7 @@ const textMap = {
 const StyledInput = styled.input`
   height: 36px;
   padding-left: 8px;
-  margin: 0 40px 6px;
+  margin-bottom: 6px;
   border-radius: 0.2rem;
   font-size: 12px;
   background: #fafafa;
@@ -42,24 +52,42 @@ const StyledInput = styled.input`
   }
 `;
 
-const ButtonWithMarginTop = styled(Button)`
-  height: 30px;
-  margin: 8px 40px;
-  width: auto;
-  font-size: 14px;
-  padding: 5px 9px;
+const ButtonWithMargin = styled(Button)`
+  margin: 8px 0px;
 `;
 
-const Divider = styled.span`
+const Divider = styled.div`
+  display: flex;
+  align-items: center;
   color: #8e8e8e;
-  font-weight: 700;
-  position: relative;
-  font-size: 1.2rem;
-  margin: 10px 40px 18px;
+  font-size: 14px;
+  padding-top: 10px;
+  width: 100%;
+  box-sizing: border-box;
+
+  ::before {
+    content: '';
+    flex-grow: 1;
+    margin-right: 16px;
+    background: #8e8e8e;
+    height: 1px;
+    font-size: 0px;
+    line-height: 0px;
+  }
+
+  ::after {
+    content: '';
+    flex-grow: 1;
+    margin-left: 16px;
+    background: #8e8e8e;
+    height: 1px;
+    font-size: 0px;
+    line-height: 0px;
+  }
 `;
 
 const FacebookLogin = styled.div`
-  margin: 8px 40px;
+  margin: 16px 40px 8px;
 
   button {
     border: 0;
@@ -67,19 +95,31 @@ const FacebookLogin = styled.div`
     cursor: pointer;
     background: 0 0;
     font-weight: 700;
-
-    .facebookIcon {
-      display: inline-block;
-      margin-right: 8px;
-      position: relative;
-      top: 3px;
-      background-repeat: no-repeat;
-      background-position: -414px -259px;
-      height: 16px;
-      width: 16px;
-      background-image: url(${facebookIcon});
-    }
   }
+`;
+
+const FacebookIcon = styled.span`
+  display: inline-block;
+  margin-right: 8px;
+  position: relative;
+  top: 3px;
+  background-repeat: no-repeat;
+
+  ${(props) =>
+    props.blue &&
+    css`
+      background-position: -414px -259px;
+    `}
+
+  ${(props) =>
+    props.white &&
+    css`
+      background-position: -414px -300px;
+    `}
+
+  height: 16px;
+  width: 16px;
+  background-image: url(${facebookIcon});
 `;
 
 const FindPassWord = styled.a`
@@ -93,7 +133,7 @@ const FindPassWord = styled.a`
 const ErrorMessage = styled.div`
   color: red;
   text-align: center;
-  font-size: 3px;
+  font-size: 14px;
   margin-top: 10px;
 `;
 
@@ -102,6 +142,17 @@ const AuthForm = ({ type, form, onChange, onSubmit, error }) => {
   return (
     <AuthFormBlock>
       <Logo src={LogoImage} />
+      {type === 'register' && (
+        <>
+          <h2>친구들의 사진과 동영상을 보려면 가입하세요.</h2>
+          <ButtonWithMargin cyan fullWidth>
+            <FacebookIcon white />
+            Facebook으로 로그인
+          </ButtonWithMargin>
+          <Divider>또는</Divider>
+        </>
+      )}
+
       <Form onSubmit={onSubmit}>
         <StyledInput
           aria-label="이메일주소"
@@ -147,36 +198,22 @@ const AuthForm = ({ type, form, onChange, onSubmit, error }) => {
           value={form.password}
         />
         {error && <ErrorMessage>{error}</ErrorMessage>}
-        <ButtonWithMarginTop cyan fullWidth>
+        <ButtonWithMargin cyan fullWidth>
           {text}
-        </ButtonWithMarginTop>
+        </ButtonWithMargin>
       </Form>
-      {/* 
-      <div>
-        <div />
-        <div>또는</div>
-        <div />
-        <div>페이스북 로그인</div>
-        <div className="flex justify-center items-center flex-col w-full bg-white p-4 rounded border border-gray-primary">
-          <p className="text-sm">
-            {type === 'login' ? '계정이 없으신가요?' : '계정이 있으신가요? '}
-            <Link
-              to={type === 'login' ? ROUTES.SIGN_UP : ROUTES.LOGIN}
-              className="font-bold text-blue-medium"
-            >
-              {type === 'login' ? '회원가입' : '로그인'}
-            </Link>
-          </p>
-        </div>
-      </div> */}
-      <Divider>OR</Divider>
-      <FacebookLogin>
-        <button>
-          <span className="facebookIcon" />
-          <span>Facebook으로 로그인</span>
-        </button>
-      </FacebookLogin>
-      <FindPassWord>비밀번호를 잊으셨나요?</FindPassWord>
+      {type === 'login' && (
+        <>
+          <Divider>또는</Divider>
+          <FacebookLogin>
+            <button>
+              <FacebookIcon blue />
+              <span>Facebook으로 로그인</span>
+            </button>
+          </FacebookLogin>
+          <FindPassWord>비밀번호를 잊으셨나요?</FindPassWord>
+        </>
+      )}
     </AuthFormBlock>
   );
 };

@@ -1,5 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import * as ROUTES from '../../constants/routes';
 
 /**
  * 회원가입 / 로그인 페이지의 레이아웃을 담당하는 컴포넌트입니다.
@@ -27,27 +29,39 @@ const WhiteBox = styled.div`
   border: 0.1rem solid rgba(112, 112, 112, 0.5);
   margin: 0 0 10px;
   padding: 10px 0;
+
+  p {
+    color: #262626;
+    font-size: 14px;
+    margin: 15px;
+    text-align: center;
+  }
 `;
 
-const Ptag = styled.p`
-  color: #262626;
-  font-size: 14px;
-  margin: 15px;
-  text-align: center;
-`;
-
-const Atag = styled.a`
+const StyledLink = styled(Link)`
+  display: inline;
   color: #0095f6;
+  font-weight: 800;
+  text-decoration: none;
+  padding-left: 5px;
 `;
 
-const AuthTemplate = ({ children }) => {
+const AuthTemplate = ({ children, type }) => {
   return (
     <AuthTemplateBlock>
       <WhiteBox>{children}</WhiteBox>
       <WhiteBox>
-        <Ptag>
-          계정이 있으신가요? <Atag>가입하기</Atag>
-        </Ptag>
+        {type === 'login' && (
+          <p>
+            계정이 없으신가요?
+            <StyledLink to={ROUTES.SIGN_UP}>가입하기</StyledLink>
+          </p>
+        )}
+        {type === 'register' && (
+          <p>
+            계정이 있으신가요? <StyledLink to={ROUTES.LOGIN}>로그인</StyledLink>
+          </p>
+        )}
       </WhiteBox>
     </AuthTemplateBlock>
   );
