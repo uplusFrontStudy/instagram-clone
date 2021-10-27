@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import Categories from './Categories';
-import Header from '../common/Header';
 import Responsive from '../common/Responsive';
 import test from '../../images/logo512.png';
 import { Link } from 'react-router-dom';

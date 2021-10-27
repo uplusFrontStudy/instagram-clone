@@ -1,7 +1,5 @@
-import React, { useLayoutEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect } from 'react';
 import { Route } from 'react-router';
-import { BrowserRouter, Switch } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import PostListPage from './pages/PostListPage';
 import PostPage from './pages/PostPage';
@@ -9,14 +7,23 @@ import RegisterPage from './pages/RegisterPage';
 import WritePage from './pages/WritePage';
 import ProfilePage from './pages/ProfilePage';
 import ProfileEditPage from './pages/ProfileEditPage';
+import { onAuthStateChanged, getAuth } from 'firebase/auth';
+import { useDispatch } from 'react-redux';
+import { setUser } from './modules/user';
+function App() {
+  const dispatch = useDispatch();
 
-import { fetchUser } from './modules/auth';
-import Header from './components/common/Header';
-
-function App({ fetchUser }) {
-  useLayoutEffect(() => {
-    fetchUser();
-  }, []);
+  useEffect(() => {
+    onAuthStateChanged(getAuth(), (authUser) => {
+      console.log(authUser);
+      if (authUser) {
+        localStorage.setItem('authUser', authUser['uid']);
+        dispatch(setUser(authUser['uid']));
+      } else {
+        localStorage.removeItem('authUser');
+      }
+    });
+  }, [dispatch]);
 
   return (
     <>
@@ -31,4 +38,4 @@ function App({ fetchUser }) {
   );
 }
 
-export default connect(null, { fetchUser })(App);
+export default App;
