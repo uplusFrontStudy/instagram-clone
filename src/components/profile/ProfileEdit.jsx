@@ -6,14 +6,14 @@ import Header from '../common/Header';
 import Button from '../common/Button';
 import Responsive from '../common/Responsive';
 
-const ProfileEdit = ({ user, editUser }) => {
+const ProfileEdit = ({ user, editUser, loginUser }) => {
     
     const nameRef = useRef();
     const history = useHistory();
     const onUpated = (event) => {
         event.preventDefault();
         editUser({
-            userId: user.userId,
+            userId: loginUser.userId,
             userName: nameRef.current.value,
         });
         history.goBack();
@@ -31,7 +31,7 @@ const ProfileEdit = ({ user, editUser }) => {
                     <form>
                         <div>
                             <h3>이름</h3>
-                            <input type="text" defaultValue={user.userName} ref={nameRef}></input>
+                            <input type="text" defaultValue={loginUser.userName} ref={nameRef}></input>
                         </div>
 
                         <div>

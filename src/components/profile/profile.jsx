@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import ImageUploadModalContainer from '../../containers/profile/ImageUploadModalContainer';
 import ModalConatainer from '../../containers/profile/ModalConatainer';
 import defaultImg from '../../images/profile_default_image.png';
 import Header from '../common/Header';
 import Responsive from '../common/Responsive';
+import FollowModalButton from './FollowModalButton';
 
-const Profile = ({user, loginUser, followStatusUpdate, loading, error}) => {
-    
+const Profile = ({ user, loading, error, followActionButton }) => {
     
     const [modal, setModal] = useState(false);
-    // 에러 발생시
+    
+    // 에러 발생
     if(error) {
+        alert(error);
         if (error.response && error.response.tatus === 404) {
             return <h1>사용자 정보를 불러오는 도중 에러가 발생하였습니다.</h1>;
         }
@@ -19,18 +21,12 @@ const Profile = ({user, loginUser, followStatusUpdate, loading, error}) => {
     }
 
     // 로딩 중이거나 아직 사용자 데이터가 없을 때
-    if (loading || !user) {
+    if (loading || !user ) {
         return null;
     }
-    const {userId, userName, profileURL, posts, follower, follow} = user;
-
-
-    const followChange = () => {
-        console.log(userId);
-
-    };
     
-
+    const {userId, userName, profileURL, posts, follower, follow} = user;
+    
     return (
         <>
             <Header />
@@ -42,22 +38,22 @@ const Profile = ({user, loginUser, followStatusUpdate, loading, error}) => {
                     <UserInfo>
                         <div>
                             <h2>{userId}</h2>
-                            {
-                                userId === loginUser.userId ?
-                                <Link to= "/account/edits"><EditBtn>프로필 편집</EditBtn></Link>:
-                                <FollowBtn onClick={followChange}>팔로우</FollowBtn>
-                            }
+                            {followActionButton}
                         </div>
                         <ul>
-                            <li><p>게시물 <span>{posts.length}</span></p></li>
-                            <li><p>팔로워 <span>{follower.length}</span></p></li>
-                            <li><p>팔로우 <span>{follow.length}</span></p></li>
+                            <li><p>게시물 <span>{ posts? posts.length : 0}</span></p></li>
+                            <li><FollowModalButton buttonName='팔로워' data={follower}/></li>
+                            <li><FollowModalButton buttonName='팔로우' data={follow}/></li>
                         </ul>
                         <div>{userName}</div>
                     </UserInfo>
                 </ProfileSection>
             </ProfileBlock>
+        <ImageUploadModalContainer />
+        {/*
         <ModalConatainer trigger={modal} setTrigger={setModal}/>
+        */}
+
         </>
     );
 }
@@ -96,7 +92,7 @@ const UserInfo = styled.section`
     div{
         display: flex;
         align-items: center;
-        margin-bottom:20px;
+        
     }
 
     div:nth-child(1) h2{
@@ -105,52 +101,34 @@ const UserInfo = styled.section`
         line-height: 32px;
     }
 
-    div:nth-child(1) button {
-
-    }
-
-    ul:nth-child(2) {
+    & > ul:nth-child(2) {
         display: flex;
         flex-direction: row;
         list-style: none;
         padding: 0px;
         margin: 3px 0;
-        margin-bottom:20px;
+        
         font-size: 16px;
     }
 
-    ul:nth-child(2) li {
-        margin-right: 40px;
+    & > ul:nth-child(2) > li {
+        padding: 10px;
+        margin-right: 20px;
     }
 
-    ul:nth-child(2) li span{
+    & > ul:nth-child(2) > li:nth-child(1) {
+        padding-left: 0px;
+    }
+
+    & > ul:nth-child(2) > li:nth-child(n+2) {
+        cursor: pointer;
+    }
+
+    & > ul:nth-child(2) > li span{
         font-weight: 600;
     }
 
-    div:nth-child(3) {
+    & > div:nth-child(3) {
         font-weight: 600;
     }
-`;
-
-const Button = styled.button`
-    height: 30px;
-    border-radius: 4px;
-    padding: 5px 9px;
-    font-weight: 600;
-    cursor: pointer;
-    margin: 0 10px 0 20px;
-    outline: 0;
-    
-`;
-
-
-const EditBtn = styled(Button)`
-    background-color:transparent;
-    border: 1px solid #dbdbdb;
-`;
-
-const FollowBtn = styled(Button)`
-    background-color: #0095f6;
-    color: white;
-    border: 0px;
 `;
