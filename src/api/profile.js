@@ -1,6 +1,15 @@
 import { firestore, storage } from '../firebase';
 
-const { doc, getDoc, getFirestore, updateDoc } = firestore;
+const {
+  doc,
+  collection,
+  getDoc,
+  getDocs,
+  getFirestore,
+  updateDoc,
+  query,
+  where,
+} = firestore;
 const { getStorage, ref, getDownloadURL, uploadBytesResumable, deleteObject } =
   storage;
 
@@ -15,6 +24,7 @@ export async function getUser(userId) {
 export async function updateUser(user) {
   const docRef = doc(getFirestore(), 'users', user.userId);
   await updateDoc(docRef, user);
+  return user;
 }
 
 export async function uploadImage(file, user) {
@@ -43,4 +53,25 @@ export async function deleteImage(user) {
   //update user profileImageURL, file name
   const docRef = doc(getFirestore(), 'users', user.userId);
   await updateDoc(docRef, { profileURL: null, profileName: null });
+}
+
+export async function getFollowUsers(userList) {
+  const res = [];
+
+  if (!userList || userList.length === 0) {
+    return res;
+  }
+
+  const q = query(
+    collection(getFirestore(), 'users'),
+    where('userId', 'in', userList),
+  );
+
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    res.push(data);
+  });
+
+  return res;
 }

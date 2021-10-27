@@ -4,15 +4,18 @@ import { updateUser } from '../../api/profile';
 import ProfileEdit from '../../components/profile/ProfileEdit';
 
 function ProfileEditContainer() {
-  const { user } = useSelector((state) => state.profile);
+  const { user, loginUser } = useSelector(({ profile }) => ({
+    user: profile.user,
+    loginUser: profile.loginUser,
+  }));
 
-  const editUser = (user) => {
-    updateUser(user);
+  const editUser = (loginUser) => {
+    updateUser(loginUser);
   };
 
   return (
     <>
-      <ProfileEdit user={user} onEditUser={editUser} />
+      <ProfileEdit user={user} onEditUser={editUser} loginUser={loginUser} />
     </>
   );
 }
