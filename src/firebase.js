@@ -15,17 +15,6 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-const getAuthenticationStatus = () => {
-  return localStorage.getItem('authUser');
-};
-
 const storage = firebaseStorage.getStorage();
 
-export {
-  firebase,
-  firestore,
-  firebaseAuth,
-  getAuthenticationStatus,
-  storage,
-  firebaseStorage,
-};
+export { firebase, firestore, firebaseAuth, storage, firebaseStorage };

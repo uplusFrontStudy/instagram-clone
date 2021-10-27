@@ -3,9 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { changeField, initializeForm, register } from '../../modules/auth';
 import AuthForm from '../../components/auth/AuthForm';
-import { doesUsernameExist } from '../../api/auth';
+import { doesUserIdExist } from '../../api/auth';
 import * as ROUTES from '../../constants/routes';
-import * as authAPI from '../../api/auth';
 
 const RegisterContainer = ({ history }) => {
   const [error, setError] = useState(null);
@@ -15,8 +14,6 @@ const RegisterContainer = ({ history }) => {
     auth,
     authError: auth.authError,
   }));
-
-  console.log(form);
 
   // 인풋 변경 이벤트 핸들러
   const onChange = (e) => {
@@ -33,32 +30,20 @@ const RegisterContainer = ({ history }) => {
   // 폼 등록 이벤트 핸들러
   const onSubmit = async (e) => {
     e.preventDefault();
-    const { username, password, emailAddress, fullName } = form;
+    const { userId, password, emailAddress, userName } = form;
 
-    const usernameExists = await doesUsernameExist(username);
+    const usernameExists = await doesUserIdExist(userId);
+
     if (!usernameExists) {
       try {
-        const createdUserResult = await dispatch(
+        dispatch(
           register({
-            username,
-            password,
             emailAddress,
-            fullName,
+            userId,
+            userName,
+            password,
           }),
         );
-
-        // await createdUserResult.user.displayName(username);
-
-        const newUser = {
-          userId: createdUserResult.user.uid,
-          username: username.toLowerCase(),
-          fullName,
-          emailAddress: emailAddress.toLowerCase(),
-          following: ['2'],
-          followers: [],
-          dateCreated: Date.now(),
-        };
-        authAPI.addUser(newUser);
 
         history.push(ROUTES.LOGIN);
       } catch (error) {
@@ -76,31 +61,13 @@ const RegisterContainer = ({ history }) => {
     dispatch(initializeForm({ form: 'register' }));
   }, [dispatch]);
 
-  useEffect(() => {
-    // if (authError) {
-    //   console.log('오류 발생');
-    //   console.log(authError);
-    //   setError('로그인 실패');
-    //   return;
-    // }
-    // if (auth) {
-    //   console.log('로그인 성공');
-    //   dispatch(check());
-    // }
-  }, []);
-
-  useEffect(() => {
-    // if (user) {
-    //   history.push('/');
-    // }
-  }, [history]);
-
   return (
     <AuthForm
       type="register"
       form={form}
       onChange={onChange}
       onSubmit={onSubmit}
+      error={error}
     />
   );
 };

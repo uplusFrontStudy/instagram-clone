@@ -6,9 +6,10 @@ import palette from '../../lib/styles/palettes';
 const buttonStyle = css`
   border: none;
   border-radius: 4px;
-  font-size: 1rem;
-  font-weight: bold;
-  padding: 0.25rem 1rem;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 5px 9px;
+  line-height: 18px;
   color: white;
   outline: none;
   cursor: pointer;

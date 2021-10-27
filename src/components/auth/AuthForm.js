@@ -1,17 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
-import palette from '../../lib/styles/palettes';
 import Button from '../common/Button';
-import * as ROUTES from '../../constants/routes';
-import LogoImage from '../../../src/images/32f0a4f27407.png';
-import { Link } from 'react-router-dom';
+import LogoImage from '../../../src/images/instagram_logo.png';
+import facebookIcon from '../../../src/images/icons.png';
 
 const AuthFormBlock = styled.div`
-	h3{
-		margin: 0;
-		color: ${palette.gray[8]},
-		margin-bottom: 1rem;
-	}
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Logo = styled.img`
+  width: 11rem;
+  margin: 22px auto 12px;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 24px;
 `;
 
 const textMap = {
@@ -19,45 +27,82 @@ const textMap = {
   register: '회원가입',
 };
 
-const ButtonWithMarginTop = styled(Button)`
-  margin-top: 1rem;
-`;
-
 const StyledInput = styled.input`
-  font-size: 1rem;
-  border: none;
-  border-bottom: 1px solid ${palette.gray[5]};
-  padding-bottom: 0.5rem;
+  height: 36px;
+  padding-left: 8px;
+  margin: 0 40px 6px;
+  border-radius: 0.2rem;
+  font-size: 12px;
+  background: #fafafa;
+  border: 0.1rem solid rgba(112, 112, 112, 0.5);
   outline: none;
-  width: 100%;
+
   &:focus {
-    color: $oc-teal-7;
-    border-bottom: 1px solid ${palette.gray[7]};
-  }
-  & + & {
-    margin-top: 1rem;
+    border-color: rgba(112, 112, 112, 0.8);
   }
 `;
 
-const Logo = styled.div`
-  margin: 22px auto 12px;
-  background-repeat: no-repeat;
-  background-position: 0 -130px;
-  height: 51px;
-  width: 175px;
-  background-image: url(${LogoImage});
-  display: block;
-  overflow: hidden;
-  text-indent: 110%;
-  white-space: nowrap;
+const ButtonWithMarginTop = styled(Button)`
+  height: 30px;
+  margin: 8px 40px;
+  width: auto;
+  font-size: 14px;
+  padding: 5px 9px;
 `;
 
-const AuthForm = ({ type, form, onChange, onSubmit }) => {
+const Divider = styled.span`
+  color: #8e8e8e;
+  font-weight: 700;
+  position: relative;
+  font-size: 1.2rem;
+  margin: 10px 40px 18px;
+`;
+
+const FacebookLogin = styled.div`
+  margin: 8px 40px;
+
+  button {
+    border: 0;
+    color: #385185;
+    cursor: pointer;
+    background: 0 0;
+    font-weight: 700;
+
+    .facebookIcon {
+      display: inline-block;
+      margin-right: 8px;
+      position: relative;
+      top: 3px;
+      background-repeat: no-repeat;
+      background-position: -414px -259px;
+      height: 16px;
+      width: 16px;
+      background-image: url(${facebookIcon});
+    }
+  }
+`;
+
+const FindPassWord = styled.a`
+  color: #00376b;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 12px 0 10px;
+  text-align: center;
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  text-align: center;
+  font-size: 3px;
+  margin-top: 10px;
+`;
+
+const AuthForm = ({ type, form, onChange, onSubmit, error }) => {
   const text = textMap[type];
   return (
     <AuthFormBlock>
-      <Logo />
-      <form onSubmit={onSubmit}>
+      <Logo src={LogoImage} />
+      <Form onSubmit={onSubmit}>
         <StyledInput
           aria-label="이메일주소"
           aria-required="true"
@@ -73,10 +118,10 @@ const AuthForm = ({ type, form, onChange, onSubmit }) => {
             aria-label="성명"
             aria-required="true"
             placeholder="성명"
-            name="fullName"
+            name="userName"
             type="text"
             onChange={onChange}
-            value={form.fullName}
+            value={form.userName}
           />
         )}
 
@@ -85,10 +130,10 @@ const AuthForm = ({ type, form, onChange, onSubmit }) => {
             aria-label="사용자 이름"
             aria-required="true"
             placeholder="사용자 이름"
-            name="username"
+            name="userId"
             type="text"
             onChange={onChange}
-            value={form.username}
+            value={form.userId}
           />
         )}
 
@@ -101,12 +146,12 @@ const AuthForm = ({ type, form, onChange, onSubmit }) => {
           onChange={onChange}
           value={form.password}
         />
-
-        <ButtonWithMarginTop cyan fullWidth style={{ marginTop: '1rem' }}>
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+        <ButtonWithMarginTop cyan fullWidth>
           {text}
         </ButtonWithMarginTop>
-      </form>
-
+      </Form>
+      {/* 
       <div>
         <div />
         <div>또는</div>
@@ -123,7 +168,15 @@ const AuthForm = ({ type, form, onChange, onSubmit }) => {
             </Link>
           </p>
         </div>
-      </div>
+      </div> */}
+      <Divider>OR</Divider>
+      <FacebookLogin>
+        <button>
+          <span className="facebookIcon" />
+          <span>Facebook으로 로그인</span>
+        </button>
+      </FacebookLogin>
+      <FindPassWord>비밀번호를 잊으셨나요?</FindPassWord>
     </AuthFormBlock>
   );
 };

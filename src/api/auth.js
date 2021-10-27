@@ -2,7 +2,6 @@ import { firebaseAuth, firestore } from '../firebase';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  onAuthStateChanged,
   signOut,
 } from 'firebase/auth';
 
@@ -11,12 +10,30 @@ const { getFirestore, getDocs, collection, query, where, addDoc } = firestore;
 
 // 로그인
 export const login = async ({ emailAddress, password }) => {
-  const response = await signInWithEmailAndPassword(
-    myAuth,
-    emailAddress,
-    password,
-  );
-  return response;
+  try {
+    const response = await signInWithEmailAndPassword(
+      myAuth,
+      emailAddress,
+      password,
+    );
+    return response;
+  } catch (e) {
+    console.error('Error adding document: ', e);
+    let errorMessage = '';
+    switch (e.code) {
+      case 'auth/wrong-password':
+        errorMessage = '비밀번호 오류';
+        break;
+      case 'auth/user-not-found':
+        errorMessage = '잘못된 정보';
+        break;
+      default:
+        errorMessage = e.code;
+        break;
+    }
+
+    throw errorMessage;
+  }
 };
 
 // 로그아웃
@@ -25,28 +42,44 @@ export const logout = async () => {
   return response;
 };
 
-// 회원가입
-export const register = async ({
-  username,
-  password,
-  emailAddress,
-  fullName,
-}) => {
-  const response = await createUserWithEmailAndPassword(
-    myAuth,
-    emailAddress,
-    password,
-  );
-  return response;
-};
-
-export const doesUsernameExist = async (username) => {
+//회원가입시 로그인 존재 여부
+export const doesUserIdExist = async (userId) => {
   const q = query(
     collection(getFirestore(), 'users'),
-    where('username', '==', username.toLowerCase()),
+    where('userId', '==', userId.toLowerCase()),
   );
   const result = await getDocs(q);
   return result.docs.length > 0;
+};
+
+// 회원가입 및 users 등록
+export const register = async ({
+  userId,
+  password,
+  emailAddress,
+  userName,
+}) => {
+  try {
+    const createdUserResult = await createUserWithEmailAndPassword(
+      myAuth,
+      emailAddress,
+      password,
+    );
+
+    const response = await addDoc(collection(getFirestore(), 'users'), {
+      uid: createdUserResult.user.uid,
+      userId: userId.toLowerCase(),
+      userName,
+      emailAddress: emailAddress.toLowerCase(),
+      following: [],
+      followers: [],
+      dateCreated: Date.now(),
+    });
+
+    return response;
+  } catch (e) {
+    console.error('Error register document: ', e);
+  }
 };
 
 export const getUserByUsername = async (username) => {
@@ -61,10 +94,10 @@ export const getUserByUsername = async (username) => {
   }));
 };
 
-export const getUserByUserId = async (userId) => {
+export const getUserByUserUid = async (userUid) => {
   const q = query(
     collection(getFirestore(), 'users'),
-    where('userId', '==', userId),
+    where('uid', '==', userUid),
   );
   const result = await getDocs(q);
   const user = result.docs.map((item) => ({
@@ -72,23 +105,4 @@ export const getUserByUserId = async (userId) => {
     docId: item.id,
   }));
   return user;
-};
-
-// 회원 등록
-export const addUser = async (data) => {
-  return await addDoc(collection(getFirestore(), 'users'), data);
-};
-
-// 회원상태확인
-export const fetchUser = async () => {
-  console.log(firebaseAuth);
-  await onAuthStateChanged(myAuth, (authUser) => {
-    if (authUser) {
-      localStorage.setItem('authUser', JSON.stringify(authUser));
-    } else {
-      localStorage.removeItem('authUser');
-    }
-    console.log(authUser);
-    return authUser;
-  });
 };
