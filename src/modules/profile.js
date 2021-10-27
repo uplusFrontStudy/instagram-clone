@@ -20,6 +20,9 @@ const GET_LOGIN_USER_SUCCESS = 'profile/GET_LOGIN_USER_SUCCESS';
 const UPDATE_LOGIN_USER = 'profile/UPDATE_LOGIN_USER';
 const UPDATE_LOGIN_USER_SUCCESS = 'profile/UPDATE_LOGIN_USER_SUCCESS';
 
+const GET_FOLLOW_USER = 'profile/GET_FOLLOW_USER';
+const GET_FOLLOW_USER_SUCCESS = 'profile/GET_FOLLOW_USER_SUCCESS';
+
 // thunk 함수 생성 => 함수 내부에서 시작, 성공, 실패 했을 때 다른 액션을 디스패치 함
 export const getUser = createRequestThunk(GET_USER, api.getUser);
 export const updateUser = createRequestThunk(UPDATE_USER, api.updateUser);
@@ -30,12 +33,17 @@ export const updateLoginUser = createRequestThunk(
   UPDATE_LOGIN_USER,
   api.updateUser,
 );
+export const getFollowUsers = createRequestThunk(
+  GET_FOLLOW_USER,
+  api.getFollowUsers,
+);
 
 // 초기 상태 선언, 로딩 상태는 loading 이라는 객체에서 관리함
 const initalState = {
   user: null,
   error: null,
   loginUser: null,
+  followUsers: null,
 };
 
 // 리듀서 생성
@@ -74,10 +82,6 @@ export default function profile(state = initalState, action) {
         },
       };
     case GET_LOGIN_USER_SUCCESS:
-      console.log('result = ', {
-        ...state,
-        loginUser: action.payload,
-      });
       return {
         ...state,
         loginUser: action.payload,
@@ -90,6 +94,11 @@ export default function profile(state = initalState, action) {
           ...state.loginUser,
           follow: action.payload.follow,
         },
+      };
+    case GET_FOLLOW_USER_SUCCESS:
+      return {
+        ...state,
+        followUsers: action.payload,
       };
     default:
       return state;

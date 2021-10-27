@@ -38,6 +38,8 @@ const Modal = ({trigger, setTrigger, onUpload, onDelete, user}) => {
     ) : "";
 }
 
+export default Modal;
+
 const ModalContainer = styled.div`
     position: fixed;
     top: 0;
@@ -88,4 +90,3 @@ const FileInput = styled.input`
 `;
 
 
-export default Modal;
