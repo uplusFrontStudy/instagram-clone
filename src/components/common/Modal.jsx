@@ -33,6 +33,7 @@ const ModalBlock = styled.div`
         padding: 0 1rem 1rem 1rem;
         display: flex;
         flex-direction: column;
+    }
 `;
 
 const Header = styled.section`
