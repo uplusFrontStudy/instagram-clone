@@ -1,5 +1,5 @@
 import React from 'react';
-import PostListContainser from '../containers/PostListContainer';
+import PostListContainser from '../containers/post/PostListContainer';
 
 function PostListPage() {
   return (

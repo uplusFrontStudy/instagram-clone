@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import Categories from './Categories';
 import Responsive from '../common/Responsive';
-import test from '../../images/logo512.png';
 import { Link } from 'react-router-dom';
 
 const PostListBlock = styled(Responsive)`
@@ -95,7 +94,7 @@ function PostList({ posts }) {
             posts.map((post, i) => {
               return (
                 <PostItem key={post.id}>
-                  <img src={post.postImages} alt="test" />
+                  <img src={post.coverImageUrl} alt="test" />
                 </PostItem>
               );
             })}

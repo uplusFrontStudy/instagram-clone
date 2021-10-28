@@ -1,47 +1,91 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Responsive from '../common/Responsive';
+import icons from '../../../src/images/icons.png';
 
 const categories = [
   {
     name: 'post',
     text: '게시물',
-  },
-  {
-    name: 'video',
-    text: '동영상',
+    icon: ['-160px -369px', '-174px -369px'],
   },
   {
     name: 'storage',
     text: '저장됨',
+    icon: ['0 -389px', '-12px -389px'],
   },
   {
     name: 'tags',
     text: '태그됨',
+    icon: ['-216px -369px', '-230px -369px'],
   },
 ];
 
 const CategoriesBlock = styled(Responsive)`
   display: flex;
-  padding: 1rem;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-align: center;
 `;
 
-const Category = styled.div`
-  margin-top: 55px;
-  font-size: 1.125rem;
+const Category = styled.a`
   cursor: pointer;
   white-space: pre;
   text-decoration: none;
-  color: inherit;
-  padding-bottom: 0.25rem;
+  color: #8e8e8e;
+  margin-right: 60px;
+  position: relative;
 
   &:hover {
     color: #495057;
+
+    ::before {
+      ${(props) =>
+        props.icon &&
+        css`
+          background-position: ${props.icon[1]};
+        `}
+    }
   }
 
-  & + & {
-    margin-left: 1rem;
+  ::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: -16px;
+    height: 12px;
+    width: 12px;
+    background-repeat: no-repeat;
+    ${(props) =>
+      props.icon &&
+      css`
+        background-position: ${props.icon[0]};
+      `}
+    background-image: url(${icons});
   }
+`;
+
+const Icons = styled.span`
+  display: inline-block;
+  margin-right: 8px;
+  position: relative;
+  background-repeat: no-repeat;
+  ${(props) =>
+    props.icon &&
+    css`
+      background-position: ${props.icon[0]};
+      &:hover {
+        background-position: ${props.icon[1]};
+      }
+    `}
+
+  height: 12px;
+  width: 12px;
+  background-image: url(${icons});
 `;
 
 const Categories = () => {
@@ -49,7 +93,9 @@ const Categories = () => {
     <>
       <CategoriesBlock>
         {categories.map((c) => (
-          <Category key={c.name}>{c.text}</Category>
+          <Category key={c.name} icon={c.icon}>
+            {c.text}
+          </Category>
         ))}
       </CategoriesBlock>
     </>

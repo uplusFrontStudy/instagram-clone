@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import Write from '../components/post/Write';
-import { changeField, initialize } from '../modules/write';
+import Write from '../../components/post/Write';
+import { changeField, initialize } from '../../modules/write';
 
 const WriteContainer = () => {
   const dispatch = useDispatch();
