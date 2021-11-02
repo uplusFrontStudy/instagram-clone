@@ -1,10 +1,9 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
+import palette from '../../lib/styles/palettes';
 import Button from '../common/Button';
 import Modal from '../common/Modal';
-import palette from '../../lib/styles/palettes';
-import defaultImg from '../../images/profile_default_image.png';
-import { Link } from 'react-router-dom';
+import Avatar from './Avatar';
 
 const EditModal = ({ visible, onCancle, currentUser, onEdit }) => {
   const nameRef = useRef();
@@ -33,11 +32,8 @@ const EditModal = ({ visible, onCancle, currentUser, onEdit }) => {
       <EditForm>
         <ul>
           <li>
-            <div className="image-box">
-              <img
-                src={currentUser.profileURL || defaultImg}
-                alt="프로필 이미지 바꾸기"
-              />
+            <div>
+              <Avatar profileURL={currentUser.profileURL} size="42px" />
             </div>
             <div>
               <p className="userId">{currentUser.userId}</p>
@@ -103,12 +99,6 @@ const EditForm = styled.form`
     width: 80%;
     max-width: 350px;
     padding-top: 4px;
-  }
-
-  .image-box img {
-    width: 42px;
-    heigth: 42px;
-    border-radius: 50%;
   }
 
   .userId {

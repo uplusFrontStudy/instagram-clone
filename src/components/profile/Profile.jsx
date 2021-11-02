@@ -5,6 +5,7 @@ import ImageUploadModalContainer from '../../containers/profile/ImageUploadModal
 import defaultImg from '../../images/profile_default_image.png';
 import palette from '../../lib/styles/palettes';
 import Responsive from '../common/Responsive';
+import Avatar from './Avatar';
 import FollowModalButton from './FollowModalButton';
 
 const Profile = ({ currentUser, loginUser, loading, error }) => {
@@ -36,7 +37,7 @@ const Profile = ({ currentUser, loginUser, loading, error }) => {
                 <ProfileSection>
                     <ImageSection>
                         <div onClick={onShowModal}>
-                            <img src={profileURL || defaultImg} alt="프로필 이미지 바꾸기"/>
+                            <Avatar profileURL={profileURL} size="150px"/>
                         </div>
                     </ImageSection>
                     <UserInfo>
@@ -84,20 +85,6 @@ const ImageSection = styled.div`
     margin: 0 30px 0 0;
     display: flex;
     justify-content: center;
-
-    & > div {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        cursor: pointer;
-        border: 0.5px solid ${palette.gray[5]};
-    }
-
-    img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-    }
 `;
 
 const UserInfo = styled.section`
