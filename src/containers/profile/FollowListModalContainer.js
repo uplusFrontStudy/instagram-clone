@@ -2,9 +2,9 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import FollowListModal from '../../components/profile/FollowListModal';
 
-const FollowListModalContainer = ({ visible, title, onCancle }) => {
-  const { followUsers } = useSelector(({ profile }) => ({
-    //loginUser: profile.loginUser,
+const FollowListModalContainer = ({ visible, title, onCancle, loginUser }) => {
+  const { followUsers } = useSelector(({ profile, user }) => ({
+    //loginUser: user.user,
     followUsers: profile.followUsers,
   }));
 
@@ -14,6 +14,7 @@ const FollowListModalContainer = ({ visible, title, onCancle }) => {
       title={title}
       followUsers={followUsers}
       onCancle={onCancle}
+      loginUser={loginUser}
     />
   );
 };

@@ -1,12 +1,17 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import EditModalContainer from '../../containers/profile/EditModalContainer';
 
-const FollowActionButton = ({ user, loginUser, editUser, editLoginUser , visibleProfileEditButton}) => {
+const FollowActionButton = ({ currentUser, loginUser, editCurrentUser, editLoginUser , visibleProfileEditButton}) => {
 
-    if (!user || !loginUser ) {
+    const [editModal, setEditModal] = useState(false);// edit modal
+    const onShowModal = () => setEditModal(true); 
+    const onHideModal = () => setEditModal(false);
+
+
+    if (!currentUser || !loginUser ) {
         return null;
-    }
+    } 
 
     function followChange(event) {
 
@@ -18,12 +23,14 @@ const FollowActionButton = ({ user, loginUser, editUser, editLoginUser , visible
             // (1) 로그인한 유저 => follow 배열에서 삭제 
             editLoginUser({
                 userId: loginUser.userId,
-                follow: loginUser.follow.filter((data) => data !== user.userId),
+                uid: loginUser.uid,
+                following: loginUser.following.filter((data) => data !== currentUser.userId),
             });
             // (2) 유저 => follower 배열에서 삭제
-            editUser({
-                userId: user.userId,
-                follower: user.follower.filter((data) => data !== loginUser.userId),
+            editCurrentUser({
+                userId: currentUser.userId,
+                uid: currentUser.uid,
+                followers: currentUser.followers.filter((data) => data !== loginUser.userId),
             });
             return;
         } else {
@@ -31,27 +38,31 @@ const FollowActionButton = ({ user, loginUser, editUser, editLoginUser , visible
             // (1) 로그인한 유저 => follow 배열에 d넣기       
             editLoginUser({
                 userId: loginUser.userId,
-                follow: loginUser.follow.concat([user.userId]),
+                uid: loginUser.uid,
+                following: loginUser.following.concat([currentUser.userId]),
             });
             // (2) 유저 => follower 배열에 넣기
-            editUser({
-                userId: user.userId,
-                follower: user.follower.concat([loginUser.userId]),
+            editCurrentUser({
+                userId: currentUser.userId,
+                uid: currentUser.uid,
+                followers: currentUser.followers.concat([loginUser.userId]),
             });
             return;
         }
     };
     // 로그인한 유저는 [프로필 편집] 버튼, 다른 사람 프로필 방문시 [팔로우] 버튼 출력
     let userBtn = null;
-    if (user.userId === loginUser.userId) {
+    if (currentUser.userId === loginUser.userId) {
         // follow list 모달에서는 [프로필 편집 ] 버튼이 뜨면 안됨
-        userBtn =  visibleProfileEditButton ? <Link to= "/account/edits"><EditBtn>프로필 편집</EditBtn></Link> : "";
+        userBtn =  visibleProfileEditButton ? 
+        <><EditBtn onClick={onShowModal}>프로필 편집</EditBtn> <EditModalContainer visible={editModal} onCancle={onHideModal} currentUser={currentUser}/></>
+        : "";
     } else {
-        loginUser.follow.some(data => data === user.userId) ?
+        loginUser.following.some(data => data === currentUser.userId) ?
             userBtn = <FollowCancleBtn data-follow-status="true" onClick={followChange}>팔로잉</FollowCancleBtn>
             : userBtn = <FollowBtn data-follow-status="false" onClick={followChange}>팔로우</FollowBtn>;
     }
-    return <>{userBtn}</>
+    return <>{userBtn}</>;
 }
 
 export default FollowActionButton;
@@ -80,7 +91,6 @@ const FollowBtn = styled(Button)`
 `;
 
 const FollowCancleBtn = styled(Button)`
-    background-color: #0095f6;
-    color: white;
-    border: 0px;
+background-color:transparent;
+border: 1px solid #dbdbdb;
 `;
