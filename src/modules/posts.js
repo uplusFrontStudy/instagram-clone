@@ -7,24 +7,6 @@ const LIST_POSTS = 'posts/LIST_POSTS';
 const LIST_POSTS_SUCCESS = 'posts/LIST_POSTS_SUCCESS';
 const LIST_POSTS_FAILURE = 'posts/LIST_POSTS_FAILURE';
 
-//웹요청 비동기 작업할땐 thunk or saga 함수
-/* export const listPosts = () => async (dispatch) => {
-  dispatch({ type: LIST_POSTS });
-  try {
-    const response = await PostsAPI.listPosts();
-
-    dispatch({
-      type: LIST_POSTS_SUCCESS,
-      payload: response,
-    });
-  } catch (error) {
-    dispatch({
-      type: LIST_POSTS_FAILURE,
-      payload: error,
-      error: true,
-    });
-  }
-}; */
 export const listPosts = createRequestThunk(LIST_POSTS, PostsAPI.listPosts);
 
 //초기상태

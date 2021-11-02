@@ -11,7 +11,7 @@ function ProfilePage() {
     <>
       <HeaderContainer />
       <ProfileContainer userId={userid} />
-      <PostListContainer />
+      <PostListContainer userId={userid} />
     </>
   );
 }

@@ -5,7 +5,7 @@ import PostModal from '../../components/post/PostModal';
 import { readPost } from '../../modules/post';
 import { listPosts } from '../../modules/posts';
 
-const PostListContainer = () => {
+const PostListContainer = ({ userId }) => {
   const { posts, postsError, postsLoading, postError, post, postLoading } =
     useSelector(({ posts, post, loading }) => ({
       posts: posts.posts,
@@ -28,8 +28,8 @@ const PostListContainer = () => {
   };
 
   useEffect(() => {
-    dispatch(listPosts());
-  }, [dispatch]);
+    dispatch(listPosts(userId));
+  }, [dispatch, userId]);
 
   if (postsLoading) return <div>로딩중..</div>;
   if (postsError) return <div>에러발생</div>;
