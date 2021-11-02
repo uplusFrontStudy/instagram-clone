@@ -44,6 +44,7 @@ const StyledButton = styled.button`
 
 const StyledLink = styled(Link)`
   ${buttonStyle}
+  text-decoration: none;
 `;
 
 const Button = (props) => {

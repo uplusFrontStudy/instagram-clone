@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import FileUpload from '../components/post/FileUpload';
-import { changeField } from '../modules/write';
+import FileUpload from '../../components/post/FileUpload';
+import { changeField } from '../../modules/write';
 
 const WriteFileUploadContainer = ({ name, ...otherProps }) => {
   const dispatch = useDispatch();

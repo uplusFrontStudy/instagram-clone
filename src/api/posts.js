@@ -1,6 +1,7 @@
+import { query } from '@firebase/firestore';
 import { firestore, firebaseStorage } from '../firebase';
 
-const { getFirestore, getDocs, collection, addDoc } = firestore;
+const { getFirestore, doc, getDoc, getDocs, collection, addDoc } = firestore;
 const { getStorage, ref, uploadBytesResumable, getDownloadURL } =
   firebaseStorage;
 
@@ -36,7 +37,7 @@ export const writePost = async ({ content, coverImage, postImages }) => {
   }
 };
 
-export async function listPosts() {
+export const listPosts = async () => {
   const response = [];
 
   try {
@@ -52,5 +53,16 @@ export async function listPosts() {
   } catch (e) {
     console.error('Error get document: ', e);
   }
+
   return response;
-}
+};
+
+export const readPost = async (docId) => {
+  try {
+    const docRef = doc(getFirestore(), 'posts', docId);
+    const response = await getDoc(docRef);
+    if (response.exists()) return response.data();
+  } catch (e) {
+    console.error('Error get document: ', e);
+  }
+};

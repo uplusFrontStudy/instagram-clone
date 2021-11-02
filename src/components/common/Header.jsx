@@ -154,8 +154,12 @@ const Header = ({ user, onLogout }) => {
               </>
             ) : (
               <div>
-                <StyledButton cyan>로그인 </StyledButton>
-                <StyledButton cyan>가입하기 </StyledButton>
+                <StyledButton cyan to="../login">
+                  로그인
+                </StyledButton>
+                <StyledButton cyan to="../register">
+                  가입하기
+                </StyledButton>
               </div>
             )}
           </MainMenu>
