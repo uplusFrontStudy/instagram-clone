@@ -22,7 +22,6 @@ const ModalBlock = styled.div`
   background-color: white;
   border-radius: 4px;
   box-shadow: 0 0 8px rgb(0 0 0 / 13%);
-  /*  padding: 1.5rem 1rem 1.5rem 1rem; */
   display: flex;
   flex-direction: column;
   & > section {
@@ -34,6 +33,9 @@ const ModalBlock = styled.div`
     display: flex;
     flex-direction: column;
   }
+  & * {
+    box-sizing: border-box;
+  }
 `;
 
 const Header = styled.section`
@@ -42,7 +44,7 @@ const Header = styled.section`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${palette.gray[4]};
-  padding: 0 1rem 1rem 1rem;
+  padding: 1rem;
   div {
     height: 100%;
     width: 24px;
