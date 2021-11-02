@@ -27,7 +27,7 @@ const Profile = ({ currentUser, loginUser, loading, error }) => {
         return null;
     }
     
-    const { userId, userName, profileURL, posts, followers, following } = currentUser;
+    const { userId, userName, profileURL, posts, followers, following, introduce } = currentUser;
 
     
     return (
@@ -53,7 +53,7 @@ const Profile = ({ currentUser, loginUser, loading, error }) => {
                             <li><FollowModalButton buttonName='팔로우' data={following} loginUser={loginUser[0]}/></li>
                         </ul>
                         <div>{userName}</div>
-                        <div className='introduce'>소개내용입니다.</div>
+                        <div className='introduce'>{introduce}</div>
                     </UserInfo>
                 </ProfileSection>
             </ProfileBlock>

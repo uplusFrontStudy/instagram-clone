@@ -60,11 +60,7 @@ export default function profile(state = initalState, action) {
     case UPDATE_USER_SUCCESS:
       return {
         ...state,
-        user: {
-          ...state.user,
-          userName: action.payload.userName,
-          follower: action.payload.follower,
-        },
+        user: action.payload,
       };
     case UPDATE_IMAGE_SUCCESS:
       return {
