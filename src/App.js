@@ -6,7 +6,6 @@ import PostPage from './pages/PostPage';
 import RegisterPage from './pages/RegisterPage';
 import WritePage from './pages/WritePage';
 import ProfilePage from './pages/ProfilePage';
-import ProfileEditPage from './pages/ProfileEditPage';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
 import { setUser } from './modules/user';
@@ -27,13 +26,24 @@ function App() {
 
   return (
     <>
-      <Route component={PostListPage} path="/" exact />
-      <Route component={LoginPage} path="/login" />
-      <Route component={RegisterPage} path="/register" />
-      <Route component={ProfilePage} path="/profile/:userid" />
-      <Route component={ProfileEditPage} path="/account/edits" />
-      <Route component={WritePage} path="/write" />
-      <Route component={PostPage} path="/:username/:postId" />
+      <Route path="/" exact>
+        <PostListPage />
+      </Route>
+      <Route path="/login">
+        <LoginPage />
+      </Route>
+      <Route path="/register">
+        <RegisterPage />
+      </Route>
+      <Route path="/:userid">
+        <ProfilePage />
+      </Route>
+      <Route path="/write">
+        <WritePage />
+      </Route>
+      <Route path="/:username/:postId">
+        <PostPage />
+      </Route>
     </>
   );
 }

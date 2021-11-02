@@ -5,6 +5,7 @@ import logo from '../../images/instagram_logo.png';
 import Button from '../common/Button';
 import defaultImg from '../../images/profile_default_image.png';
 import { Link } from 'react-router-dom';
+import SearchContainer from '../../containers/SearchContainer';
 
 const HeaderBlock = styled.div`
   position: fixed;
@@ -63,6 +64,8 @@ const Header = ({ user, onLogout }) => {
               <img src={logo} alt="l" />
             </a>
           </Logo>
+          
+          <SearchContainer />
 
           <MainMenu>
             {user ? (

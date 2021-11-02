@@ -22,17 +22,24 @@ const ModalBlock = styled.div`
   background-color: white;
   border-radius: 4px;
   box-shadow: 0 0 8px rgb(0 0 0 / 13%);
-  padding: 1.5rem 1rem 1.5rem 1rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
   display: flex;
   flex-direction: column;
+
     & > section {
         width: 100%;
         text-align: center;
     }
+
     & > .buttons{
-        padding: 0 1rem 1rem 1rem;
         display: flex;
         flex-direction: column;
+    }
+
+    & * {
+      box-sizing: border-box;
+    }
 `;
 
 const Header = styled.section`
@@ -41,7 +48,8 @@ const Header = styled.section`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${palette.gray[4]};
-  padding: 0 1rem 1rem 1rem;
+  padding: 0 1.5rem 1rem 1.5rem;
+  
   div {
     height: 100%;
     width: 24px;
@@ -51,8 +59,11 @@ const Header = styled.section`
 const Content = styled.section`
   display: flex;
   flex-direction: column;
-  padding: 0 1rem 1rem 1rem;
-  
+  padding: .5rem 1.5rem 0 1.5rem;
+`;
+
+const Buttons = styled.section`
+  padding-bottom: 1.5rem;
 `;
 
 const Modal = ({ visible, title, content, confirmText, cancleText, onConfirm, onCancle, closeButton }) => {
@@ -89,10 +100,13 @@ const Modal = ({ visible, title, content, confirmText, cancleText, onConfirm, on
         <Content>
             {content}
         </Content>
-        <section className="buttons">
-        {confirmText && <Button>{confirmText}</Button>}
-        {cancleText && <Button>{cancleText}</Button>}
-        </section>
+        { confirmText || cancleText ?
+          <Buttons>
+          {confirmText && <Button>{confirmText}</Button>}
+          {cancleText && <Button>{cancleText}</Button>}
+          </Buttons>
+          : ""
+        }
       </ModalBlock>
     </Fullscreen>
   );

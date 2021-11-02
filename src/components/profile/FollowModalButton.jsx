@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import FollowListModalContainer from '../../containers/profile/FollowListModalContainer';
 import { getFollowUsers } from '../../modules/profile';
 
-const FollowButton = ({ buttonName, data}) => {
+const FollowButton = ({ buttonName, data, loginUser}) => {
 
     const dispatch=useDispatch()    
     const [modal, setModal] = useState(false);
@@ -18,7 +18,7 @@ const FollowButton = ({ buttonName, data}) => {
     return (
         <>
             <p onClick={onShowModal}>{buttonName} <span>{ data ? data.length : 0}</span></p>
-            <FollowListModalContainer visible={modal} title={buttonName} data={data} onCancle={onCancle}/>
+            <FollowListModalContainer visible={modal} title={buttonName} data={data} loginUser={loginUser} onCancle={onCancle}/>
         </>
     );
             
