@@ -6,15 +6,23 @@ import { readPost } from '../../modules/post';
 import { listPosts } from '../../modules/posts';
 
 const PostListContainer = ({ userId }) => {
-  const { posts, postsError, postsLoading, postError, post, postLoading } =
-    useSelector(({ posts, post, loading }) => ({
-      posts: posts.posts,
-      postsError: posts.error,
-      postsLoading: loading['posts/LIST_POSTS'],
-      post: post.post,
-      postError: post.error,
-      postLoading: loading['post/READ_POST'],
-    }));
+  const {
+    posts,
+    postsError,
+    postsLoading,
+    postError,
+    post,
+    postLoading,
+    loginUser,
+  } = useSelector(({ posts, post, loading, user }) => ({
+    posts: posts.posts,
+    postsError: posts.error,
+    postsLoading: loading['posts/LIST_POSTS'],
+    post: post.post,
+    postError: post.error,
+    postLoading: loading['post/READ_POST'],
+    loginUser: user.user,
+  }));
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
 
@@ -41,7 +49,12 @@ const PostListContainer = ({ userId }) => {
 
   return (
     <>
-      <PostList posts={posts.data} getPost={getPost} />
+      <PostList
+        posts={posts}
+        getPost={getPost}
+        currentUser={userId}
+        loginUser={loginUser}
+      />
       <PostModal visible={modal} data={post} onCancle={onCancle} key={post} />
     </>
   );

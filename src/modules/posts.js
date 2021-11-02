@@ -11,43 +11,25 @@ export const listPosts = createRequestThunk(LIST_POSTS, PostsAPI.listPosts);
 
 //초기상태
 const initialState = {
-  posts: {
-    loading: false,
-    data: null,
-    error: null,
-  },
+  posts: null,
+  error: null,
 };
 
 //리듀서
 export default function posts(state = initialState, action) {
   switch (action.type) {
-    case LIST_POSTS:
-      return {
-        ...state,
-        posts: {
-          loading: true,
-          data: null,
-          error: null,
-        },
-      };
     case LIST_POSTS_SUCCESS:
       return {
         ...state,
-        posts: {
-          loading: false,
-          data: action.payload,
-          error: null,
-        },
+        posts: action.payload,
+        error: null,
       };
 
     case LIST_POSTS_FAILURE:
       return {
         ...state,
-        posts: {
-          loading: false,
-          data: null,
-          error: action.payload,
-        },
+        posts: null,
+        error: action.payload,
       };
     default:
       return state;

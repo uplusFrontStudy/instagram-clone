@@ -4,13 +4,15 @@ import Categories from './Categories';
 import Responsive from '../common/Responsive';
 import { Link } from 'react-router-dom';
 
-function PostList({ posts, getPost }) {
+const PostList = ({ posts, getPost, currentUser, loginUser }) => {
   return (
     <>
-      <Categories />
+      {currentUser && <Categories />}
       <PostListBlock>
         <WritePostButtonWrapper>
-          <StyledLink to="../write">+ 새 개시물</StyledLink>
+          {currentUser === loginUser && (
+            <StyledLink to="../write">+ 새 개시물</StyledLink>
+          )}
         </WritePostButtonWrapper>
         <Article>
           {posts &&
@@ -25,7 +27,7 @@ function PostList({ posts, getPost }) {
       </PostListBlock>
     </>
   );
-}
+};
 
 export default PostList;
 
