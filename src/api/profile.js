@@ -17,7 +17,8 @@ export async function updateProfile(user) {
   return user;
 }
 
-export async function updateProfileImage(type, user, file) {
+export async function updateProfileImage({ type, user, file }) {
+  console.log('api', type, user, file);
   const storage = getStorage();
 
   let profileURL = null;
