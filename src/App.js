@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route } from 'react-router';
+import { Route, Switch } from 'react-router';
 import LoginPage from './pages/LoginPage';
 import PostListPage from './pages/PostListPage';
 import PostPage from './pages/PostPage';
@@ -9,6 +9,7 @@ import ProfilePage from './pages/ProfilePage';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
 import { setUser } from './modules/user';
+import PrivateRoute from './lib/PrivateRoute';
 
 function App() {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ function App() {
   }, [dispatch]);
 
   return (
-    <>
+    <Switch>
       <Route path="/" exact>
         <PostListPage />
       </Route>
@@ -36,16 +37,16 @@ function App() {
       <Route path="/register">
         <RegisterPage />
       </Route>
+      <PrivateRoute path="/write">
+        <WritePage />
+      </PrivateRoute>
       <Route path="/:userid">
         <ProfilePage />
-      </Route>
-      <Route path="/write">
-        <WritePage />
       </Route>
       <Route path="/:username/:postId">
         <PostPage />
       </Route>
-    </>
+    </Switch>
   );
 }
 

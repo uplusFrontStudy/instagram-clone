@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import { changeField, login } from '../../modules/auth';
 import AuthForm from '../../components/auth/AuthForm';
 import * as ROUTES from '../../constants/routes';
+import { useHistory, useLocation } from 'react-router';
 
-const LoginContainer = ({ history }) => {
+const LoginContainer = () => {
+  let history = useHistory();
+  let location = useLocation();
+
+  let { from } = location.state || { from: { pathname: ROUTES.DASHBOARD } };
+
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const { form, auth, authError } = useSelector(({ form, auth, user }) => ({
@@ -48,9 +53,9 @@ const LoginContainer = ({ history }) => {
     //로그인 성공
     if (auth) {
       console.log('로그인 성공');
-      history.push(ROUTES.DASHBOARD);
+      history.replace(from);
     }
-  }, [auth, authError, history]);
+  }, [auth, authError, history, from]);
 
   return (
     <AuthForm
@@ -63,4 +68,4 @@ const LoginContainer = ({ history }) => {
   );
 };
 
-export default withRouter(LoginContainer);
+export default LoginContainer;
