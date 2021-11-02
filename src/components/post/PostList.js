@@ -4,6 +4,31 @@ import Categories from './Categories';
 import Responsive from '../common/Responsive';
 import { Link } from 'react-router-dom';
 
+function PostList({ posts, getPost }) {
+  return (
+    <>
+      <Categories />
+      <PostListBlock>
+        <WritePostButtonWrapper>
+          <StyledLink to="../write">+ 새 개시물</StyledLink>
+        </WritePostButtonWrapper>
+        <Article>
+          {posts &&
+            posts.map((post, i) => {
+              return (
+                <PostItem key={post.id} onClick={() => getPost(post.id)}>
+                  <img src={post.coverImageUrl} alt="test" key={post.id} />
+                </PostItem>
+              );
+            })}
+        </Article>
+      </PostListBlock>
+    </>
+  );
+}
+
+export default PostList;
+
 const PostListBlock = styled(Responsive)`
   display: flex;
   flex-direction: column;
@@ -24,27 +49,28 @@ const WritePostButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-bottom: 16px;
+`;
 
-  button {
-    border: 0;
-    color: #0095f6;
-    display: inline;
-    padding: 0;
-    position: relative;
-    background: 0 0;
-    cursor: pointer;
-    right: 0;
-    text-align: center;
+const StyledLink = styled(Link)`
+  border: 0;
+  color: #0095f6;
+  display: inline;
+  padding: 0;
+  position: relative;
+  background: 0 0;
+  cursor: pointer;
+  right: 0;
+  text-align: center;
+  text-decoration: none;
 
-    font-size: 14px;
-    line-height: 18px;
-    font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 600;
 
-    margin-right: 28px;
+  margin-right: 28px;
 
-    @media (max-width: 735px) {
-      margin-right: 3px;
-    }
+  @media (max-width: 735px) {
+    margin-right: 3px;
   }
 `;
 
@@ -76,32 +102,6 @@ const PostItem = styled.div`
     border-radius: 5px;
     height: 100%;
     width: 100%;
+    cursor: pointer;
   }
 `;
-
-function PostList({ posts }) {
-  return (
-    <>
-      <Categories />
-      <PostListBlock>
-        <WritePostButtonWrapper>
-          <Link to="./write">
-            <button>+새 개시물</button>
-          </Link>
-        </WritePostButtonWrapper>
-        <Article>
-          {posts &&
-            posts.map((post, i) => {
-              return (
-                <PostItem key={post.id}>
-                  <img src={post.coverImageUrl} alt="test" />
-                </PostItem>
-              );
-            })}
-        </Article>
-      </PostListBlock>
-    </>
-  );
-}
-
-export default PostList;

@@ -1,4 +1,106 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import palette from '../../lib/styles/palettes';
+import Button from './Button';
+import icons from '../../../src/images/icons.png';
+
+const Fullscreen = styled.div`
+  position: fixed;
+  z-index: 30;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalBlock = styled.div`
+  min-width: 320px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgb(0 0 0 / 13%);
+  /*  padding: 1.5rem 1rem 1.5rem 1rem; */
+  display: flex;
+  flex-direction: column;
+  & > section {
+    width: 100%;
+    text-align: center;
+  }
+  & > .buttons {
+    padding: 0 1rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+`;
+
+const Header = styled.section`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid ${palette.gray[4]};
+  padding: 0 1rem 1rem 1rem;
+  div {
+    height: 100%;
+    width: 24px;
+  }
+`;
+
+const Content = styled.section`
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem 1rem 1rem;
+`;
+
+const CancelBtn = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 20px;
+  width: 20px;
+  cursor: pointer;
+  margin: 16px;
+  background-position: -410px -212px;
+  background-repeat: no-repeat;
+  background-image: url(${icons});
+`;
+
+const Modal = ({ visible, title, onCancle, children }) => {
+  const modalEl = useRef();
+
+  /*   const handleClickOutside = (e) => {
+    if (visible && modalEl.current && !modalEl.current.contains(e.target)) {
+      onCancle();
+    }
+  };
+
+  useEffect(() => {
+    document.body.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.body.removeEventListener('click', handleClickOutside);
+    };
+  }, []); */
+
+  if (!visible) return null;
+
+  return (
+    <Fullscreen>
+      <ModalBlock ref={modalEl}>
+        {title && <Header>{title}</Header>}
+        {children}
+      </ModalBlock>
+      )
+    </Fullscreen>
+  );
+};
+
+export default Modal;
+
+/* import React from 'react';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palettes';
 import Button from './Button';
@@ -98,4 +200,4 @@ const Modal = ({ visible, title, content, confirmText, cancleText, onConfirm, on
   );
 };
 
-export default Modal;
+export default Modal; */
