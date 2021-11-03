@@ -48,8 +48,8 @@ const Profile = ({ currentUser, loginUser, loading, error }) => {
                         </div>
                         <ul>
                             <li><p>게시물 <span>{ posts? posts.length : 0}</span></p></li>
-                            <li><FollowModalButton buttonName='팔로워' data={followers} loginUser={loginUser}/></li>
-                            <li><FollowModalButton buttonName='팔로우' data={following} loginUser={loginUser}/></li>
+                            <li><FollowModalButton buttonName='팔로워' followUsers={followers} loginUser={loginUser}/></li>
+                            <li><FollowModalButton buttonName='팔로우' followUsers={following} loginUser={loginUser}/></li>
                         </ul>
                         <div>{userName}</div>
                         <div className='introduce'>{introduce}</div>

@@ -46,6 +46,7 @@ export const updateImage = createRequestThunk(
 const initalState = {
   user: null,
   error: null,
+  loginUser: null,
   followUsers: null,
 };
 

@@ -2,116 +2,103 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import FollowActionButtonContainer from '../../containers/profile/FollowActionButtonContainer';
-import defaultImg from '../../images/profile_default_image.png';
 import palette from '../../lib/styles/palettes';
 import Modal from '../common/Modal';
+import Avatar from './Avatar';
 
 const FollowListModal = ({
-  visible,
-  title,
-  followUsers,
-  onCancle,
+  buttonName,
+  followUsersData,
   loginUser,
+  visible,
+  onCancle,
 }) => {
-  if (!visible || !followUsers) {
+  if (!visible || !followUsersData) {
     return null;
   }
 
+  const title = (
+    <>
+      <div></div>
+      <h1>{buttonName}</h1>
+      <div onClick={onCancle}>
+        <svg
+          aria-label="닫기"
+          className="_8-yf5 "
+          color="#262626"
+          fill="#262626"
+          height="24"
+          role="img"
+          viewBox="0 0 48 48"
+          width="24"
+        >
+          <path
+            clipRule="evenodd"
+            d="M41.1 9.1l-15 15L41 39c.6.6.6 1.5 0 2.1s-1.5.6-2.1 0L24 26.1l-14.9 15c-.6.6-1.5.6-2.1 0-.6-.6-.6-1.5 0-2.1l14.9-15-15-15c-.6-.6-.6-1.5 0-2.1s1.5-.6 2.1 0l15 15 15-15c.6-.6 1.5-.6 2.1 0 .6.6.6 1.6 0 2.2z"
+            fillRule="evenodd"
+          ></path>
+        </svg>
+      </div>
+    </>
+  );
   return (
     <Modal
       visible={visible}
       title={title}
       onCancle={onCancle}
       closeButton={true}
-      content={
-        <List>
-          {followUsers.length === 0 ? (
-            title === '팔로워' ? (
-              <TextBox>
-                <h4>🙅‍♀️</h4>
-                <h5>팔로워</h5>
-                <p>회원님을 팔로우하는 모든 사람이 여기에 표시됩니다.</p>
-              </TextBox>
-            ) : (
-              <TextBox>
-                <h4>🙅‍♀️</h4>
-                <h5>회원님이 팔로우하는 사람</h5>
-                <p>회원님이 팔로우하는 사람들이 여기에 표시됩니다.</p>
-              </TextBox>
-            )
+    >
+      {followUsersData.length === 0 && (
+        <Content>
+          {buttonName === '팔로워' ? (
+            <div>
+              <h4>🙅‍♀️</h4>
+              <h5>팔로워</h5>
+              <p>회원님을 팔로우하는 모든 사람이 여기에 표시됩니다.</p>
+            </div>
           ) : (
-            followUsers.map((user) => (
-              <li className="follow-user" key={user.uid}>
-                <div>
-                  <Link to={`../profile/${user.userId}`}>
-                    <img
-                      src={user.profileURL || defaultImg}
-                      alt="프로필이미지"
-                    />
-                  </Link>
-                  <div>
-                    <p className="userid">{user.userId}</p>
-                    <p className="username">{user.userName}</p>
-                  </div>
-                </div>
-                <FollowActionButtonContainer
-                  currentUser={user}
-                  loginUser={loginUser}
-                  visibleProfileEditButton={false}
-                />
-              </li>
-            ))
+            <div>
+              <h4>🙅‍♀️</h4>
+              <h5>회원님이 팔로우하는 사람</h5>
+              <p>회원님이 팔로우하는 사람들이 여기에 표시됩니다.</p>
+            </div>
           )}
+        </Content>
+      )}
+
+      {followUsersData.length > 0 && (
+        <List>
+          {followUsersData.map((user) => (
+            <li className="follow-user" key={user.uid}>
+              <div>
+                <Link to={`../${user.userId}`} onClick={onCancle}>
+                  <Avatar src={user.profileURL} size="45px" />
+                </Link>
+
+                <div>
+                  <p className="userid">{user.userId}</p>
+                  <p className="username">{user.userName}</p>
+                </div>
+              </div>
+
+              <FollowActionButtonContainer
+                currentUser={user}
+                loginUser={loginUser}
+                visibleProfileEditButton={false}
+              />
+            </li>
+          ))}
         </List>
-      }
-    />
+      )}
+    </Modal>
   );
 };
 
 export default FollowListModal;
+const Content = styled.div`
+  padding: 2rem;
+  text-align: center;
 
-const List = styled.ul`
-  padding-top: 40px;
-  padding-bottom: 40px;
-
-  & > .follow-user {
-    padding: 0.5rem;
-  }
-
-  & > .follow-user img {
-    width: 45px;
-    height: 45px;
-    border: 0.5px solid ${palette.gray[5]};
-    border-radius: 50%;
-  }
-
-  & li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-align: left;
-  }
-
-  & li > div {
-    display: flex;
-  }
-
-  & li img {
-    margin-right: 20px;
-  }
-
-  & li .userid {
-    font-weight: 600;
-    margin-bottom: 5px;
-  }
-
-  & li .username {
-    font-weight: 400;
-    color: ${palette.gray[6]};
-  }
-`;
-
-const TextBox = styled.div`
   h4 {
     font-size: 80px;
   }
@@ -126,5 +113,34 @@ const TextBox = styled.div`
   p {
     font-weight: 400;
     font-size: 14px;
+  }
+`;
+
+const List = styled.ul`
+  padding: 1rem;
+
+  & li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  & li > div {
+    display: flex;
+    align-items: center;
+  }
+
+  & li > div > div {
+    margin-left: 15px;
+  }
+
+  & li .userid {
+    font-weight: 600;
+  }
+
+  & li .username {
+    font-weight: 400;
+    color: ${palette.gray[6]};
+    font-size: 15px;
   }
 `;
