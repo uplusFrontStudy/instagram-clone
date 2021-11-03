@@ -81,10 +81,7 @@ export default function profile(state = initalState, action) {
     case UPDATE_LOGIN_USER_SUCCESS:
       return {
         ...state,
-        loginUser: {
-          ...state.loginUser,
-          follow: action.payload.follow,
-        },
+        loginUser: action.payload,
       };
     case GET_FOLLOW_USERS_DATA_SUCCESS:
       return {
