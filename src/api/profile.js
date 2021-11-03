@@ -10,6 +10,11 @@ export async function getUserByUserId(userId) {
   return result[0];
 }
 
+export async function getUserByUserUid(uid) {
+  const result = await getDocsByQuery('uid', '==', uid, 'data');
+  return result[0];
+}
+
 export async function updateProfile(user) {
   const userDoc = await getDocsByQuery('uid', '==', user.uid, 'id');
   const userRef = doc(getFirestore(), 'users', userDoc[0]);

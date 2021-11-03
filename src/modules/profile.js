@@ -31,7 +31,7 @@ export const getFollowUsers = createRequestThunk(
 );
 export const getLoginUser = createRequestThunk(
   GET_LOGIN_USER,
-  api.getUserByUserId,
+  api.getUserByUserUid,
 );
 export const updateLoginUser = createRequestThunk(
   UPDATE_LOGIN_USER,
