@@ -57,6 +57,46 @@ export const listPosts = async (userId) => {
   }
 };
 
+export const getUserByUserId = async (userId) => {
+  const q = query(
+    collection(getFirestore(), 'users'),
+    where('userId', '==', userId),
+  );
+  const result = await getDocs(q);
+  const user = result.docs.map((item) => ({
+    ...item.data(),
+    docId: item.id,
+  }));
+  return user;
+};
+
+export const getFollowPosts = async (following) => {
+  try {
+    const q = query(
+      collection(getFirestore(), 'posts'),
+      where('userId', 'in', following),
+    );
+
+    const result = await getDocs(q);
+    const followPosts = result.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+
+    const postsWithUserDetails = await Promise.all(
+      followPosts.map(async (photo) => {
+        const user = await getUserByUserId(photo.userId);
+        photo['profileURL'] = user[0].profileURL;
+        return { ...photo };
+      }),
+    );
+
+    return postsWithUserDetails;
+  } catch (e) {
+    console.log('Error getFollowPosts: ', e);
+  }
+};
+
 export const readPost = async (docId) => {
   try {
     const docRef = doc(getFirestore(), 'posts', docId);
