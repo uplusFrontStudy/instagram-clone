@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router';
 import LoginPage from './pages/LoginPage';
-import PostListPage from './pages/PostListPage';
+import DashboardPage from './pages/DashboardPage';
 import PostPage from './pages/PostPage';
 import RegisterPage from './pages/RegisterPage';
 import WritePage from './pages/WritePage';
@@ -28,9 +28,9 @@ function App() {
 
   return (
     <Switch>
-      <Route path="/" exact>
-        <PostListPage />
-      </Route>
+      <PrivateRoute path="/" exact>
+        <DashboardPage />
+      </PrivateRoute>
       <Route path="/login">
         <LoginPage />
       </Route>
