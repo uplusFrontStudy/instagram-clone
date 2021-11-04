@@ -16,7 +16,6 @@ const ImageUploadModal = ({ visible, user, onCancle, onUpdateImage }) => {
 
   async function uploadProfile(event) {
     const file = event.target.files[0];
-    console.log(user, file);
     const type = 'upload';
     await onUpdateImage({ type, user, file });
     await onCancle();
@@ -37,7 +36,7 @@ const ImageUploadModal = ({ visible, user, onCancle, onUpdateImage }) => {
   );
 
   return (
-    <Modal visible={true} title={title}>
+    <Modal visible={true} title={title} onCancle={onCancle}>
       <>
         <FileInput
           ref={inputRef}

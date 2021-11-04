@@ -89,9 +89,24 @@ const CancelBtn = styled.div`
   background-image: url(${icons});
 `;
 
+//https://velog.io/@tlatjdgh3778/React%EC%97%90%EC%84%9C-Modal-%EA%B5%AC%ED%98%84
+
 const Modal = ({ visible, title, onCancle, children, isSearchModal }) => {
   const modalEl = useRef();
 
+  const handleClickOutside = (e) => {
+    if (visible && modalEl.current && !modalEl.current.contains(e.target)) {
+      onCancle();
+    }
+  };
+
+  useEffect(() => {
+    document.body.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.body.removeEventListener('click', handleClickOutside);
+    };
+  }, );
   /*   const handleClickOutside = (e) => {
     if (visible && modalEl.current && !modalEl.current.contains(e.target)) {
       onCancle();

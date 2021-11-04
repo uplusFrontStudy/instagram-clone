@@ -28,7 +28,7 @@ const EditModal = ({ visible, onCancle, currentUser, onEdit }) => {
   );
 
   return (
-    <Modal title={title} visible={visible}>
+    <Modal title={title} visible={visible} onCancle={onCancle}>
       <EditForm>
         <ul>
           <li>

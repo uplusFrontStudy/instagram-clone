@@ -8,19 +8,16 @@ const SearchResultModal = ({ visible, searchUsers, loginUser, onCancle }) => {
   if (!searchUsers) {
     return null;
   }
+
   return (
-    <Modal visible={visible} isSearchModal={true}>
+    <Modal visible={visible} isSearchModal={true} onCancle={onCancle}>
       <Content>
         {searchUsers.length === 0 ? (
           <div>
             <p>검색 결과가 없습니다.</p>
           </div>
         ) : (
-          <UserList
-            users={searchUsers}
-            loginUser={loginUser}
-            onCancle={onCancle}
-          />
+          <UserList users={searchUsers} loginUser={loginUser} />
         )}
       </Content>
     </Modal>
