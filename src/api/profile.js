@@ -10,6 +10,11 @@ export async function getUserByUserId(userId) {
   return result[0];
 }
 
+export async function getUsersByUserId(keyword) {
+  const result = await getDocsByQuery('userId', '==', keyword, 'data');
+  return result;
+}
+
 export async function getUserByUserUid(uid) {
   const result = await getDocsByQuery('uid', '==', uid, 'data');
   return result[0];
@@ -68,16 +73,18 @@ async function getDocsByQuery(column, sign, value, returnType) {
   );
 
   const querySnapshot = await getDocs(q);
+  console.log('querySnapshot = ', querySnapshot);
 
-  querySnapshot.forEach((doc) => {
-    if (returnType === 'id') {
-      res.push(doc.id);
-    } else if (returnType === 'data') {
-      res.push(doc.data());
-    } else {
-      res.push(doc);
-    }
-  });
-
+  if (!querySnapshot.empty) {
+    querySnapshot.forEach((doc) => {
+      if (returnType === 'id') {
+        res.push(doc.id);
+      } else if (returnType === 'data') {
+        res.push(doc.data());
+      } else {
+        res.push(doc);
+      }
+    });
+  }
   return res;
 }
