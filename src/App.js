@@ -10,13 +10,16 @@ import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
 import { setUser } from './modules/user';
 import PrivateRoute from './lib/PrivateRoute';
+import { useSelector } from 'react-redux';
 
 function App() {
+  const { loading } = useSelector(({ loading }) => ({
+    loading: loading['user/SET_USER'],
+  }));
   const dispatch = useDispatch();
 
   useEffect(() => {
     onAuthStateChanged(getAuth(), (authUser) => {
-      console.log(`App : ${authUser}`);
       if (authUser) {
         localStorage.setItem('authUser', authUser['uid']);
         dispatch(setUser(authUser['uid']));
@@ -25,6 +28,8 @@ function App() {
       }
     });
   }, [dispatch]);
+
+  if (loading) return null;
 
   return (
     <Switch>

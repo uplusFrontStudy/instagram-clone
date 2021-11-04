@@ -4,7 +4,18 @@ import Categories from './Categories';
 import Responsive from '../common/Responsive';
 import { Link } from 'react-router-dom';
 
-const PostList = ({ posts, getPost, currentUser, loginUser }) => {
+const PostList = ({
+  posts,
+  loading,
+  error,
+  currentUser,
+  loginUser,
+  getPost,
+}) => {
+  if (error) {
+    return <PostListBlock>에러가 발생했습니다.</PostListBlock>;
+  }
+
   return (
     <>
       {currentUser && <Categories />}
@@ -15,7 +26,8 @@ const PostList = ({ posts, getPost, currentUser, loginUser }) => {
           )}
         </WritePostButtonWrapper>
         <Article>
-          {posts &&
+          {!loading &&
+            posts &&
             posts.map((post, i) => {
               return (
                 <PostItem key={post.id} onClick={() => getPost(post.id)}>

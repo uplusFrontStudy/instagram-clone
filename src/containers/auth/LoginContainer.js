@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeField, login } from '../../modules/auth';
+import { changeField, initializeForm, login } from '../../modules/auth';
 import AuthForm from '../../components/auth/AuthForm';
 import * as ROUTES from '../../constants/routes';
 import { useHistory, useLocation } from 'react-router';
@@ -13,11 +13,14 @@ const LoginContainer = () => {
 
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
-  const { form, auth, authError } = useSelector(({ form, auth, user }) => ({
-    form: auth.login,
-    auth: auth.auth,
-    authError: auth.authError,
-  }));
+  const { form, auth, authError, user } = useSelector(
+    ({ form, auth, user }) => ({
+      form: auth.login,
+      auth: auth.auth,
+      authError: auth.authError,
+      user: user.user,
+    }),
+  );
 
   // 인풋 변경 이벤트 핸들러
   const onChange = (e) => {
@@ -45,17 +48,21 @@ const LoginContainer = () => {
   };
 
   useEffect(() => {
+    dispatch(initializeForm('login'));
+  }, [dispatch]);
+
+  useEffect(() => {
     if (authError) {
       console.log('로그인 오류발생');
       setError(authError);
       return;
     }
     //로그인 성공
-    if (auth) {
+    if (user) {
       console.log('로그인 성공');
       history.replace(from);
     }
-  }, [auth, authError, history, from]);
+  }, [user, authError, history, from]);
 
   return (
     <AuthForm
