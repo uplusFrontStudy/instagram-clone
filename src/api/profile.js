@@ -28,7 +28,6 @@ export async function updateProfile(user) {
 }
 
 export async function updateProfileImage({ type, user, file }) {
-  console.log('api', type, user, file);
   const storage = getStorage();
 
   let profileURL = null;
@@ -73,7 +72,6 @@ async function getDocsByQuery(column, sign, value, returnType) {
   );
 
   const querySnapshot = await getDocs(q);
-  console.log('querySnapshot = ', querySnapshot);
 
   if (!querySnapshot.empty) {
     querySnapshot.forEach((doc) => {

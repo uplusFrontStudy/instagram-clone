@@ -12,7 +12,6 @@ const UserList = ({users, loginUser, onCancle}) => {
                 <li className="follow-user" key={user.uid}>
                     <div>
                     <Link to={`../${user.userId}`} onClick={onCancle}>
-                        {console.log('url', user.profileURL)}
                         <Avatar profileURL={user.profileURL} size="45px" />
                     </Link>
 
