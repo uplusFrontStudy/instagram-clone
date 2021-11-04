@@ -4,6 +4,7 @@ import Responsive from '../common/Responsive';
 import defaultImg from '../../images/profile_default_image.png';
 import icons from '../../images/icons2.png';
 import { Link } from 'react-router-dom';
+import Slider from '../common/Slider';
 
 const Dashboard = ({ followPosts }) => {
   console.log(followPosts);
@@ -26,7 +27,7 @@ const Dashboard = ({ followPosts }) => {
                   </Profile>
                   <Postinfo />
                 </PostHeader>
-                <img src={followPost.coverImageUrl} alt={index} />
+                <Slider postImagesUrl={followPost.postImagesUrl} />
                 <PostButtonSection>
                   <LikeButton />
                   <CommentButton />

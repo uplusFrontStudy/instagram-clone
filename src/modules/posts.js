@@ -32,7 +32,6 @@ export default function posts(state = initialState, action) {
         posts: action.payload,
         error: null,
       };
-
     case LIST_POSTS_FAILURE:
       return {
         ...state,
