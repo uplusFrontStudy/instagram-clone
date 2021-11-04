@@ -1,10 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import FollowActionButtonContainer from '../../containers/profile/FollowActionButtonContainer';
-import palette from '../../lib/styles/palettes';
 import Modal from '../common/Modal';
-import Avatar from './Avatar';
+import UserList from './UserList';
 
 const FollowListModal = ({
   buttonName,
@@ -67,28 +64,11 @@ const FollowListModal = ({
       )}
 
       {followUsersData.length > 0 && (
-        <List>
-          {followUsersData.map((user) => (
-            <li className="follow-user" key={user.uid}>
-              <div>
-                <Link to={`../${user.userId}`} onClick={onCancle}>
-                  <Avatar src={user.profileURL} size="45px" />
-                </Link>
-
-                <div>
-                  <p className="userid">{user.userId}</p>
-                  <p className="username">{user.userName}</p>
-                </div>
-              </div>
-
-              <FollowActionButtonContainer
-                currentUser={user}
-                loginUser={loginUser}
-                visibleProfileEditButton={false}
-              />
-            </li>
-          ))}
-        </List>
+        <UserList
+          users={followUsersData}
+          loginUser={loginUser}
+          onCancle={onCancle}
+        />
       )}
     </Modal>
   );
@@ -113,34 +93,5 @@ const Content = styled.div`
   p {
     font-weight: 400;
     font-size: 14px;
-  }
-`;
-
-const List = styled.ul`
-  padding: 1rem;
-
-  & li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  & li > div {
-    display: flex;
-    align-items: center;
-  }
-
-  & li > div > div {
-    margin-left: 15px;
-  }
-
-  & li .userid {
-    font-weight: 600;
-  }
-
-  & li .username {
-    font-weight: 400;
-    color: ${palette.gray[6]};
-    font-size: 15px;
   }
 `;
