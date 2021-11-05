@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import palette from '../../lib/styles/palettes';
 import Button from './Button';
 import icons from '../../../src/images/icons.png';
@@ -22,7 +22,6 @@ const ModalBlock = styled.div`
   background-color: white;
   border-radius: 4px;
   box-shadow: 0 0 8px rgb(0 0 0 / 13%);
-  /*  padding: 1.5rem 1rem 1.5rem 1rem; */
   display: flex;
   flex-direction: column;
   & > section {
@@ -34,6 +33,28 @@ const ModalBlock = styled.div`
     display: flex;
     flex-direction: column;
   }
+  & * {
+    box-sizing: border-box;
+  }
+  ${props => props.isSearchModal 
+    && css`
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      &:after {
+        content: '';
+        position: absolute;
+        border-style: solid;
+        border-width: 0 12px 12px 12px;
+        border-color: #FFFFFF transparent;
+        display: block;
+        width: 0;
+        z-index: 1;
+        top: -12px; 
+        left: 49px; 
+        }
+    `}
 `;
 
 const Header = styled.section`
@@ -42,7 +63,7 @@ const Header = styled.section`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${palette.gray[4]};
-  padding: 0 1rem 1rem 1rem;
+  padding: 1rem;
   div {
     height: 100%;
     width: 24px;
@@ -68,9 +89,24 @@ const CancelBtn = styled.div`
   background-image: url(${icons});
 `;
 
-const Modal = ({ visible, title, onCancle, children }) => {
+//https://velog.io/@tlatjdgh3778/React%EC%97%90%EC%84%9C-Modal-%EA%B5%AC%ED%98%84
+
+const Modal = ({ visible, title, onCancle, children, isSearchModal }) => {
   const modalEl = useRef();
 
+  const handleClickOutside = (e) => {
+    if (visible && modalEl.current && !modalEl.current.contains(e.target)) {
+      onCancle();
+    }
+  };
+
+  useEffect(() => {
+    document.body.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.body.removeEventListener('click', handleClickOutside);
+    };
+  }, );
   /*   const handleClickOutside = (e) => {
     if (visible && modalEl.current && !modalEl.current.contains(e.target)) {
       onCancle();
@@ -89,7 +125,7 @@ const Modal = ({ visible, title, onCancle, children }) => {
 
   return (
     <Fullscreen>
-      <ModalBlock ref={modalEl}>
+      <ModalBlock ref={modalEl} isSearchModal={isSearchModal}>
         {title && <Header>{title}</Header>}
         {children}
       </ModalBlock>

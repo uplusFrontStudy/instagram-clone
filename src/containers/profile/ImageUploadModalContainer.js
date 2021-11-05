@@ -10,7 +10,7 @@ const ImageUploadModalContainer = ({ visible, onCancle }) => {
   }));
 
   const updateProfileImage = useCallback(
-    (type, user, file) => dispatch(updateImage(type, user, file)),
+    (params) => dispatch(updateImage(params)),
     [dispatch],
   );
 

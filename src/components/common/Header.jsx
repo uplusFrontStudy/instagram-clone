@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import Responsive from './Responsive';
 import logo from '../../images/instagram_logo.png';
 import Button from '../common/Button';
-import defaultImg from '../../images/profile_default_image.png';
 import { Link } from 'react-router-dom';
 import SearchContainer from '../../containers/SearchContainer';
+import Avatar from '../profile/Avatar';
 
 const HeaderBlock = styled.div`
   position: fixed;
@@ -41,11 +41,6 @@ const MainMenu = styled.div`
 
 const Spacer = styled.div`
   margin-top: 54px;
-`;
-
-const ProfileImg = styled.img`
-  height: 22px;
-  width: 22pz;
 `;
 
 const StyledButton = styled(Button)`
@@ -140,11 +135,8 @@ const Header = ({ user, onLogout }) => {
                     </a>
                   </li>
                   <li>
-                    <Link to={`profile/${user[0].userId}`}>
-                      <ProfileImg
-                        src={user[0].profileURL || defaultImg}
-                        alt="프로필 이미지"
-                      />
+                    <Link to={`/${user[0].userId}`}>
+                    <Avatar profileURL={user[0].profileURL} size="22px"/>
                     </Link>
                     <StyledButton cyan onClick={onLogout}>
                       로그아웃

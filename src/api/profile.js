@@ -10,6 +10,16 @@ export async function getUserByUserId(userId) {
   return result[0];
 }
 
+export async function getUsersByUserId(keyword) {
+  const result = await getDocsByQuery('userId', '==', keyword, 'data');
+  return result;
+}
+
+export async function getUserByUserUid(uid) {
+  const result = await getDocsByQuery('uid', '==', uid, 'data');
+  return result[0];
+}
+
 export async function updateProfile(user) {
   const userDoc = await getDocsByQuery('uid', '==', user.uid, 'id');
   const userRef = doc(getFirestore(), 'users', userDoc[0]);
@@ -17,7 +27,7 @@ export async function updateProfile(user) {
   return user;
 }
 
-export async function updateProfileImage(type, user, file) {
+export async function updateProfileImage({ type, user, file }) {
   const storage = getStorage();
 
   let profileURL = null;
@@ -63,15 +73,16 @@ async function getDocsByQuery(column, sign, value, returnType) {
 
   const querySnapshot = await getDocs(q);
 
-  querySnapshot.forEach((doc) => {
-    if (returnType === 'id') {
-      res.push(doc.id);
-    } else if (returnType === 'data') {
-      res.push(doc.data());
-    } else {
-      res.push(doc);
-    }
-  });
-
+  if (!querySnapshot.empty) {
+    querySnapshot.forEach((doc) => {
+      if (returnType === 'id') {
+        res.push(doc.id);
+      } else if (returnType === 'data') {
+        res.push(doc.data());
+      } else {
+        res.push(doc);
+      }
+    });
+  }
   return res;
 }
