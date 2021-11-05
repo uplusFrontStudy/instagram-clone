@@ -1,64 +1,97 @@
 import React from 'react';
-import FollowActionButtonContainer from '../../containers/profile/FollowActionButtonContainer';
-import Modal from '../common/Modal';
-import defaultImg from '../../images/profile_default_image.png';
 import styled from 'styled-components';
-import palette from '../../lib/styles/palettes';
+import Modal from '../common/Modal';
+import UserList from './UserList';
 
-const FollowListModal = ({ visible, title, followUsers, onCancle }) => {
-  if (!visible || !followUsers) {
+const FollowListModal = ({
+  buttonName,
+  followUsersData,
+  loginUser,
+  visible,
+  onCancle,
+}) => {
+  if (!visible || !followUsersData) {
     return null;
   }
 
+  const title = (
+    <>
+      <div></div>
+      <h1>{buttonName}</h1>
+      <div onClick={onCancle}>
+        <svg
+          aria-label="닫기"
+          className="_8-yf5 "
+          color="#262626"
+          fill="#262626"
+          height="24"
+          role="img"
+          viewBox="0 0 48 48"
+          width="24"
+        >
+          <path
+            clipRule="evenodd"
+            d="M41.1 9.1l-15 15L41 39c.6.6.6 1.5 0 2.1s-1.5.6-2.1 0L24 26.1l-14.9 15c-.6.6-1.5.6-2.1 0-.6-.6-.6-1.5 0-2.1l14.9-15-15-15c-.6-.6-.6-1.5 0-2.1s1.5-.6 2.1 0l15 15 15-15c.6-.6 1.5-.6 2.1 0 .6.6.6 1.6 0 2.2z"
+            fillRule="evenodd"
+          ></path>
+        </svg>
+      </div>
+    </>
+  );
   return (
     <Modal
       visible={visible}
       title={title}
       onCancle={onCancle}
       closeButton={true}
-      content={
-        <List>
-          {followUsers.length === 0 ? (
-            title === '팔로워' ? (
-              <div>
-                팔로워 회원님을 팔로우하는 모든 사람이 여기에 표시됩니다.
-              </div>
-            ) : (
-              <div>
-                회원님이 팔로우하는 사람 회원님이 팔로우하는 사람들이 여기에
-                표시됩니다.
-              </div>
-            )
+    >
+      {followUsersData.length === 0 && (
+        <Content>
+          {buttonName === '팔로워' ? (
+            <div>
+              <h4>🙅‍♀️</h4>
+              <h5>팔로워</h5>
+              <p>회원님을 팔로우하는 모든 사람이 여기에 표시됩니다.</p>
+            </div>
           ) : (
-            followUsers.map((user) => (
-              <div className="follow-user" key={user.userId}>
-                <img src={user.profileURL || defaultImg} alt="프로필이미지" />
-                <p>{user.userId}</p>
-                <p>{user.userName}</p>
-                <FollowActionButtonContainer
-                  user={user}
-                  visibleProfileEditButton={false}
-                />
-              </div>
-            ))
+            <div>
+              <h4>🙅‍♀️</h4>
+              <h5>회원님이 팔로우하는 사람</h5>
+              <p>회원님이 팔로우하는 사람들이 여기에 표시됩니다.</p>
+            </div>
           )}
-        </List>
-      }
-    />
+        </Content>
+      )}
+
+      {followUsersData.length > 0 && (
+        <UserList
+          users={followUsersData}
+          loginUser={loginUser}
+          onCancle={onCancle}
+        />
+      )}
+    </Modal>
   );
 };
 
 export default FollowListModal;
+const Content = styled.div`
+  padding: 2rem;
+  text-align: center;
 
-const List = styled.ul`
-  & > .follow-user {
-    padding: 0.5rem;
+  h4 {
+    font-size: 80px;
   }
 
-  & > .follow-user img {
-    width: 40px;
-    height: 40px;
-    border: 0.5px solid ${palette.gray[5]};
-    border-radius: 50%;
+  h5 {
+    font-weight: 300;
+    font-size: 22px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+  }
+
+  p {
+    font-weight: 400;
+    font-size: 14px;
   }
 `;

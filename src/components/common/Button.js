@@ -22,10 +22,9 @@ const buttonStyle = css`
   ${(props) =>
     props.fullWidth &&
     css`
-      padding-top: 0.75rem;
-      padding-bottom: 0.75rem;
+      //padding: 0.75rem 0;
       width: 100%;
-      font-size: 1.125rem;
+      //font-size: 1.125rem;
     `}
 
   ${(props) =>
@@ -44,6 +43,7 @@ const StyledButton = styled.button`
 
 const StyledLink = styled(Link)`
   ${buttonStyle}
+  text-decoration: none;
 `;
 
 const Button = (props) => {

@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import FollowActionButtonContainer from '../../containers/profile/FollowActionButtonContainer';
 import ImageUploadModalContainer from '../../containers/profile/ImageUploadModalContainer';
-import ModalConatainer from '../../containers/profile/ModalConatainer';
-import defaultImg from '../../images/profile_default_image.png';
-import Header from '../common/Header';
 import Responsive from '../common/Responsive';
+import Avatar from './Avatar';
 import FollowModalButton from './FollowModalButton';
 
-const Profile = ({ user, loading, error, followActionButton }) => {
+const Profile = ({ currentUser, loginUser, loading, error }) => {
     
-    const [modal, setModal] = useState(false);
+    const [uploadModal, setUploadModal] = useState(false);
+    const onShowModal = () => setUploadModal(true); 
+    const onHideModal = () => setUploadModal(false);
     
     // 에러 발생
     if(error) {
@@ -21,39 +22,41 @@ const Profile = ({ user, loading, error, followActionButton }) => {
     }
 
     // 로딩 중이거나 아직 사용자 데이터가 없을 때
-    if (loading || !user ) {
+    if (loading || typeof loginUser === 'string' || !currentUser ) {
         return null;
     }
     
-    const {userId, userName, profileURL, posts, follower, follow} = user;
+    const { userId, userName, profileURL, posts, followers, following, introduce } = currentUser;
+
     
     return (
         <>
-            <Header />
             <ProfileBlock>
                 <ProfileSection>
-                    <ImageContainer onClick={()=> setModal(true)}>
-                        <img src={profileURL || defaultImg} alt="프로필 이미지 바꾸기"/>
-                    </ImageContainer>
+                    <ImageSection>
+                        <div onClick={onShowModal}>
+                            <Avatar profileURL={profileURL} size="150px"/>
+                        </div>
+                    </ImageSection>
                     <UserInfo>
                         <div>
                             <h2>{userId}</h2>
-                            {followActionButton}
+                            <FollowActionButtonContainer
+                                currentUser={currentUser}
+                                loginUser={loginUser}
+                                visibleProfileEditButton={true}/>
                         </div>
                         <ul>
                             <li><p>게시물 <span>{ posts? posts.length : 0}</span></p></li>
-                            <li><FollowModalButton buttonName='팔로워' data={follower}/></li>
-                            <li><FollowModalButton buttonName='팔로우' data={follow}/></li>
+                            <li><FollowModalButton buttonName='팔로워' followUsers={followers} loginUser={loginUser}/></li>
+                            <li><FollowModalButton buttonName='팔로우' followUsers={following} loginUser={loginUser}/></li>
                         </ul>
                         <div>{userName}</div>
+                        <div className='introduce'>{introduce}</div>
                     </UserInfo>
                 </ProfileSection>
             </ProfileBlock>
-        <ImageUploadModalContainer />
-        {/*
-        <ModalConatainer trigger={modal} setTrigger={setModal}/>
-        */}
-
+            <ImageUploadModalContainer visible={uploadModal} onCancle={onHideModal}/>
         </>
     );
 }
@@ -67,56 +70,46 @@ const ProfileBlock = styled(Responsive)`
 
 const ProfileSection = styled.section`
     width:100%;
-    margin: 85px auto 0px;
+    margin: 30px auto 0px;
     padding-bottom: 50px;
     border-bottom: 1px solid rgba(var(--b38,219,219,219),1);
     display: flex;
     font-size: 1.125rem;
 `;
 
-const ImageContainer = styled.div`
+const ImageSection = styled.div`
     width: 290px;
     height: 150px;
     margin: 0 30px 0 0;
-    text-align: center;
-
-    img {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        cursor: pointer;
-    }
+    display: flex;
+    justify-content: center;
 `;
 
 const UserInfo = styled.section`
-    div{
+    padding-top: 10px;
+
+    & > * {
+        margin-bottom: 13px;
         display: flex;
-        align-items: center;
-        
     }
 
-    div:nth-child(1) h2{
+    & > div > h2 {
         font-size: 28px;
         font-weight: 300;
         line-height: 32px;
+        padding-right: 20px;
     }
 
-    & > ul:nth-child(2) {
-        display: flex;
-        flex-direction: row;
-        list-style: none;
-        padding: 0px;
-        margin: 3px 0;
-        
+    & > ul {
         font-size: 16px;
     }
 
-    & > ul:nth-child(2) > li {
+    & > ul > li {
         padding: 10px;
         margin-right: 20px;
     }
 
-    & > ul:nth-child(2) > li:nth-child(1) {
+    & > ul > li:nth-child(1) {
         padding-left: 0px;
     }
 
@@ -124,11 +117,13 @@ const UserInfo = styled.section`
         cursor: pointer;
     }
 
-    & > ul:nth-child(2) > li span{
-        font-weight: 600;
+    & > ul + div {
+        font-weight: 400;
+        margin-bottom: 8px;
     }
 
-    & > div:nth-child(3) {
-        font-weight: 600;
+    .introduce {
+        font-weight: 100;
+        font-size: 14px;
     }
 `;

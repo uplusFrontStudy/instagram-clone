@@ -1,77 +1,88 @@
-import { firestore, storage } from '../firebase';
+import { firebaseStorage, firestore } from '../firebase';
 
-const {
-  doc,
-  collection,
-  getDoc,
-  getDocs,
-  getFirestore,
-  updateDoc,
-  query,
-  where,
-} = firestore;
+const { getFirestore, doc, collection, getDocs, updateDoc, query, where } =
+  firestore;
 const { getStorage, ref, getDownloadURL, uploadBytesResumable, deleteObject } =
-  storage;
+  firebaseStorage;
 
-export async function getUser(userId) {
-  let res = null;
-  const docRef = doc(getFirestore(), 'users', userId);
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) res = docSnap.data();
-  return res;
+export async function getUserByUserId(userId) {
+  const result = await getDocsByQuery('userId', '==', userId, 'data');
+  return result[0];
 }
 
-export async function updateUser(user) {
-  const docRef = doc(getFirestore(), 'users', user.userId);
-  await updateDoc(docRef, user);
+export async function getUsersByUserId(keyword) {
+  const result = await getDocsByQuery('userId', '==', keyword, 'data');
+  return result;
+}
+
+export async function getUserByUserUid(uid) {
+  const result = await getDocsByQuery('uid', '==', uid, 'data');
+  return result[0];
+}
+
+export async function updateProfile(user) {
+  const userDoc = await getDocsByQuery('uid', '==', user.uid, 'id');
+  const userRef = doc(getFirestore(), 'users', userDoc[0]);
+  await updateDoc(userRef, user);
   return user;
 }
 
-export async function uploadImage(file, user) {
-  let res = null;
-  // image upload
+export async function updateProfileImage({ type, user, file }) {
   const storage = getStorage();
-  const storageRef = ref(storage, `profile/${user.userId}/${file.name}`);
 
-  // get imageURL
-  await uploadBytesResumable(storageRef, file);
-  const downloadURL = await getDownloadURL(storageRef);
-  res = { profileURL: downloadURL, profileName: file.name };
+  let profileURL = null;
+  let profileName = null;
 
-  //update user profileImageURL, file name
-  const docRef = doc(getFirestore(), 'users', user.userId);
-  await updateDoc(docRef, res);
-
-  return res;
-}
-
-export async function deleteImage(user) {
-  const storage = getStorage();
-  const storageRef = ref(storage, `profile/${user.userId}/${user.profileName}`);
-  await deleteObject(storageRef);
-
-  //update user profileImageURL, file name
-  const docRef = doc(getFirestore(), 'users', user.userId);
-  await updateDoc(docRef, { profileURL: null, profileName: null });
-}
-
-export async function getFollowUsers(userList) {
-  const res = [];
-
-  if (!userList || userList.length === 0) {
-    return res;
+  if (type === 'upload') {
+    const storageRef = ref(storage, `profile/${user.uid}/${file.name}`);
+    await uploadBytesResumable(storageRef, file);
+    const downloadURL = await getDownloadURL(storageRef);
+    profileURL = downloadURL;
+    profileName = file.name;
+  } else if (type === 'delete') {
+    const storageRef = ref(storage, `profile/${user.uid}/${user.profileName}`);
+    await deleteObject(storageRef);
   }
+
+  const updateUser = {
+    ...user,
+    profileURL,
+    profileName,
+  };
+
+  const userDoc = await getDocsByQuery('uid', '==', user.uid, 'id');
+  const userRef = doc(getFirestore(), 'users', userDoc[0]);
+  await updateDoc(userRef, updateUser);
+
+  return updateUser;
+}
+
+export async function getFollowUsersData(userList) {
+  if (!userList || userList.length === 0) return [];
+  const userDocs = await getDocsByQuery('userId', 'in', userList, 'data');
+  return userDocs;
+}
+
+async function getDocsByQuery(column, sign, value, returnType) {
+  const res = [];
 
   const q = query(
     collection(getFirestore(), 'users'),
-    where('userId', 'in', userList),
+    where(column, sign, value),
   );
 
   const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
-    res.push(data);
-  });
 
+  if (!querySnapshot.empty) {
+    querySnapshot.forEach((doc) => {
+      if (returnType === 'id') {
+        res.push(doc.id);
+      } else if (returnType === 'data') {
+        res.push(doc.data());
+      } else {
+        res.push(doc);
+      }
+    });
+  }
   return res;
 }

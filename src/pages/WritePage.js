@@ -2,10 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import Header from '../components/common/Header';
 import Responsive from '../components/common/Responsive';
-import WriteActionButtonContainer from '../containers/WriteActionButtonContainer';
-import WriteContainer from '../containers/WriteContainer';
-import WriteFilePreviewContainer from '../containers/WriteFilePreviewContainer';
-import WriteFileUploadContainer from '../containers/WriteFileUploadContainer';
+import WriteActionButtonContainer from '../containers/post/WriteActionButtonContainer';
+import WriteContainer from '../containers/post/WriteContainer';
+import WriteFilePreviewContainer from '../containers/post/WriteFilePreviewContainer';
+import WriteFileUploadContainer from '../containers/post/WriteFileUploadContainer';
 import plusImg from '../images/plus.png';
 
 const WriteLayout = styled(Responsive)`
