@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { setUser } from './modules/user';
 import PrivateRoute from './lib/PrivateRoute';
 import { useSelector } from 'react-redux';
+import { getLoginUser } from './modules/profile';
 
 function App() {
   const { loading } = useSelector(({ loading }) => ({
@@ -23,6 +24,7 @@ function App() {
       if (authUser) {
         localStorage.setItem('authUser', authUser['uid']);
         dispatch(setUser(authUser['uid']));
+        dispatch(getLoginUser(authUser['uid']));
       } else {
         localStorage.removeItem('authUser');
       }

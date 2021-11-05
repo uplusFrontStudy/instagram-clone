@@ -7,9 +7,9 @@ function ProfileContainer({ userId }) {
   // 처음 마운트될 때 사용자 정보 읽기 API 요청
   const dispatch = useDispatch();
   const { currentUser, loginUser, error, loading } = useSelector(
-    ({ profile, loading, user }) => ({
+    ({ profile, loading }) => ({
       currentUser: profile.user,
-      loginUser: user.user,
+      loginUser: profile.loginUser,
       error: profile.error,
       loading: loading['profile/GET_USER'],
     }),

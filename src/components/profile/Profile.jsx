@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import FollowActionButtonContainer from '../../containers/profile/FollowActionButtonContainer';
 import ImageUploadModalContainer from '../../containers/profile/ImageUploadModalContainer';
-import defaultImg from '../../images/profile_default_image.png';
-import palette from '../../lib/styles/palettes';
 import Responsive from '../common/Responsive';
+import Avatar from './Avatar';
 import FollowModalButton from './FollowModalButton';
 
 const Profile = ({ currentUser, loginUser, loading, error }) => {
@@ -27,7 +26,7 @@ const Profile = ({ currentUser, loginUser, loading, error }) => {
         return null;
     }
     
-    const { userId, userName, profileURL, posts, followers, following } = currentUser;
+    const { userId, userName, profileURL, posts, followers, following, introduce } = currentUser;
 
     
     return (
@@ -36,7 +35,7 @@ const Profile = ({ currentUser, loginUser, loading, error }) => {
                 <ProfileSection>
                     <ImageSection>
                         <div onClick={onShowModal}>
-                            <img src={profileURL || defaultImg} alt="프로필 이미지 바꾸기"/>
+                            <Avatar profileURL={profileURL} size="150px"/>
                         </div>
                     </ImageSection>
                     <UserInfo>
@@ -44,16 +43,16 @@ const Profile = ({ currentUser, loginUser, loading, error }) => {
                             <h2>{userId}</h2>
                             <FollowActionButtonContainer
                                 currentUser={currentUser}
-                                loginUser={loginUser[0]}
+                                loginUser={loginUser}
                                 visibleProfileEditButton={true}/>
                         </div>
                         <ul>
                             <li><p>게시물 <span>{ posts? posts.length : 0}</span></p></li>
-                            <li><FollowModalButton buttonName='팔로워' data={followers} loginUser={loginUser[0]}/></li>
-                            <li><FollowModalButton buttonName='팔로우' data={following} loginUser={loginUser[0]}/></li>
+                            <li><FollowModalButton buttonName='팔로워' followUsers={followers} loginUser={loginUser}/></li>
+                            <li><FollowModalButton buttonName='팔로우' followUsers={following} loginUser={loginUser}/></li>
                         </ul>
                         <div>{userName}</div>
-                        <div className='introduce'>소개내용입니다.</div>
+                        <div className='introduce'>{introduce}</div>
                     </UserInfo>
                 </ProfileSection>
             </ProfileBlock>
@@ -84,20 +83,6 @@ const ImageSection = styled.div`
     margin: 0 30px 0 0;
     display: flex;
     justify-content: center;
-
-    & > div {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        cursor: pointer;
-        border: 0.5px solid ${palette.gray[5]};
-    }
-
-    img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-    }
 `;
 
 const UserInfo = styled.section`
