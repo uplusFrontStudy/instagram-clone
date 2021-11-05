@@ -4,24 +4,6 @@ import createRequestThunk from '../lib/createRequestThunk';
 const READ_POST = 'post/READ_POST';
 const READ_POST_SUCCESS = 'post/READ_POST_SUCCESS';
 const READ_POST_FAILURE = 'post/READ_POST_FAILURE';
-/* 
-export const readPost = (docId) => async (dispatch) => {
-  dispatch({ type: READ_POST });
-  try {
-    const response = await PostsAPI.readPost(docId);
-
-    dispatch({
-      type: READ_POST_SUCCESS,
-      payload: response,
-    });
-  } catch (error) {
-    dispatch({
-      type: READ_POST_FAILURE,
-      paylod: error,
-      error: true,
-    });
-  }
-}; */
 
 export const readPost = createRequestThunk(READ_POST, PostsAPI.readPost);
 

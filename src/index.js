@@ -8,7 +8,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import ReduxThunk from 'redux-thunk';
 import { createBrowserHistory } from 'history';
-import { tempSetUser } from './modules/user';
+import { setUser, tempSetUser } from './modules/user';
 
 const customHistory = createBrowserHistory();
 
@@ -25,6 +25,7 @@ const store = createStore(
     const user = localStorage.getItem('authUser');
     if (!user) return;
     store.dispatch(tempSetUser(user)); //새로고침 관련 임시 user저장
+    store.dispatch(setUser(user));
   } catch (e) {
     console.log('localStorage not working');
   }

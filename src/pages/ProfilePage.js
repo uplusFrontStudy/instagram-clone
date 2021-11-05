@@ -3,6 +3,7 @@ import ProfileContainer from '../containers/profile/ProfileContainer';
 import PostListContainer from '../containers/post/PostListContainer';
 import HeaderContainer from '../containers/HeaderContainer';
 import { useParams } from 'react-router-dom';
+import PostModalContainer from '../containers/post/PostModalContainer';
 
 function ProfilePage() {
   const { userid } = useParams();
@@ -11,7 +12,8 @@ function ProfilePage() {
     <>
       <HeaderContainer />
       <ProfileContainer userId={userid} />
-      <PostListContainer />
+      <PostListContainer userId={userid} />
+      <PostModalContainer />
     </>
   );
 }

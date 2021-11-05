@@ -45,9 +45,20 @@ const PostImage = styled.img`
   margin: auto;
 `;
 
-const PostModal = ({ visible, title, data, onCancle }) => {
+const PostModal = ({ visible, post, error, loading, onCancle }) => {
   if (!visible) return null;
-  if (!data) return null;
+
+  if (error) {
+    if (error.response && error.response.status === 404) {
+      return <Modal visible={visible}>존재하지 않는 포스트입니다.</Modal>;
+    }
+    return <Modal>오류 발생!</Modal>;
+  }
+
+  console.log(loading);
+  if (loading || !post) {
+    return null;
+  }
 
   const setting = {
     dots: true,
@@ -58,11 +69,11 @@ const PostModal = ({ visible, title, data, onCancle }) => {
   };
 
   return (
-    <Modal visible={visible} title={title} onCancle={onCancle}>
+    <Modal visible={visible} onCancle={onCancle}>
       <Wrap>
         <StyledSlider {...setting}>
-          {data &&
-            data.postImagesUrl.map((postImage, i) => {
+          {post &&
+            post.postImagesUrl.map((postImage, i) => {
               return <PostImage src={postImage} alt="test" key={postImage} />;
             })}
         </StyledSlider>

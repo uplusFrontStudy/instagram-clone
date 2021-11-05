@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import posts from './posts';
 import profile from './profile';
 import auth from './auth';
-import loading from './auth';
+import loading from './loading';
 import write from './write';
 import user from './user';
 import post from './post';

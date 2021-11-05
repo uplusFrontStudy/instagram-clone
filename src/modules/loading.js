@@ -3,12 +3,12 @@ const FINISH_LOADING = 'loading/FINISH_LOADING';
 
 export const startLoading = (requestType) => ({
   type: START_LOADING,
-  requestType,
+  payload: requestType,
 });
 
 export const finishLoading = (requestType) => ({
   type: FINISH_LOADING,
-  requestType,
+  payload: requestType,
 });
 
 const initalState = {};

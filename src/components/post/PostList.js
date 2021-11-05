@@ -4,16 +4,30 @@ import Categories from './Categories';
 import Responsive from '../common/Responsive';
 import { Link } from 'react-router-dom';
 
-function PostList({ posts, getPost }) {
+const PostList = ({
+  posts,
+  loading,
+  error,
+  currentUser,
+  loginUser,
+  getPost,
+}) => {
+  if (error) {
+    return <PostListBlock>에러가 발생했습니다.</PostListBlock>;
+  }
+
   return (
     <>
-      <Categories />
+      {currentUser && <Categories />}
       <PostListBlock>
         <WritePostButtonWrapper>
-          <StyledLink to="../write">+ 새 개시물</StyledLink>
+          {currentUser === loginUser && (
+            <StyledLink to="../write">+ 새 개시물</StyledLink>
+          )}
         </WritePostButtonWrapper>
         <Article>
-          {posts &&
+          {!loading &&
+            posts &&
             posts.map((post, i) => {
               return (
                 <PostItem key={post.id} onClick={() => getPost(post.id)}>
@@ -25,7 +39,7 @@ function PostList({ posts, getPost }) {
       </PostListBlock>
     </>
   );
-}
+};
 
 export default PostList;
 
