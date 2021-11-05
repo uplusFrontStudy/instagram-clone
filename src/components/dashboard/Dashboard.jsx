@@ -6,15 +6,23 @@ import icons from '../../images/icons2.png';
 import { Link } from 'react-router-dom';
 import Slider from '../common/Slider';
 
-const Dashboard = ({ followPosts }) => {
-  console.log(followPosts);
+const Dashboard = ({ followPosts, loading, error }) => {
+  if (error) {
+    return <DashboardBlock>에러발생</DashboardBlock>;
+  }
+
+  if (!followPosts) {
+    return <DashboardBlock>포스트가 존재하지 않습니다.</DashboardBlock>;
+  }
+
   return (
     <DashboardBlock>
       <PostSection>
-        {followPosts &&
+        {!loading &&
+          followPosts &&
           followPosts.map((followPost, index) => {
             return (
-              <PostArticle>
+              <PostArticle key={index}>
                 <PostHeader>
                   <Profile>
                     <img
