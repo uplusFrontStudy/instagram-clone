@@ -39,7 +39,7 @@ const PostImage = styled.img`
   margin: auto;
 `;
 
-const Slider = ({ postImagesUrl }) => {
+const Slider = ({ postFilesUrl }) => {
   const setting = {
     dots: true,
     infinite: false,
@@ -50,9 +50,9 @@ const Slider = ({ postImagesUrl }) => {
 
   return (
     <StyledSlider {...setting}>
-      {postImagesUrl &&
-        postImagesUrl.map((postImage, i) => {
-          return <PostImage src={postImage} alt="test" key={postImage} />;
+      {postFilesUrl &&
+        postFilesUrl.map((postFile, i) => {
+          return <PostImage src={postFile} alt="test" key={postFile} />;
         })}
     </StyledSlider>
   );

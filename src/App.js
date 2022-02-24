@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route, Switch } from 'react-router';
+import { Route, Switch, useLocation } from 'react-router';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import PostPage from './pages/PostPage';
@@ -18,6 +18,8 @@ function App() {
     loading: loading['user/SET_USER'],
   }));
   const dispatch = useDispatch();
+  let location = useLocation();
+  let background = location.state && location.state.background;
 
   useEffect(() => {
     onAuthStateChanged(getAuth(), (authUser) => {
@@ -34,26 +36,32 @@ function App() {
   if (loading) return null;
 
   return (
-    <Switch>
-      <PrivateRoute path="/" exact>
-        <DashboardPage />
-      </PrivateRoute>
-      <Route path="/login">
-        <LoginPage />
-      </Route>
-      <Route path="/register">
-        <RegisterPage />
-      </Route>
-      <PrivateRoute path="/write">
-        <WritePage />
-      </PrivateRoute>
-      <Route path="/:userid">
-        <ProfilePage />
-      </Route>
-      <Route path="/:username/:postId">
-        <PostPage />
-      </Route>
-    </Switch>
+    <>
+      <Switch location={background || location}>
+        <PrivateRoute path="/" exact>
+          <DashboardPage />
+        </PrivateRoute>
+        <Route path="/login">
+          <LoginPage />
+        </Route>
+        <Route path="/register">
+          <RegisterPage />
+        </Route>
+
+        <Route path="/:userid">
+          <ProfilePage />
+        </Route>
+        <Route path="/:username/:postId">
+          <PostPage />
+        </Route>
+      </Switch>
+
+      {background && (
+        <PrivateRoute path="/write">
+          <WritePage />
+        </PrivateRoute>
+      )}
+    </>
   );
 }
 

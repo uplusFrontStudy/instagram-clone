@@ -55,7 +55,6 @@ const PostModal = ({ visible, post, error, loading, onCancle }) => {
     return <Modal>오류 발생!</Modal>;
   }
 
-  console.log(loading);
   if (loading || !post) {
     return null;
   }
@@ -73,8 +72,8 @@ const PostModal = ({ visible, post, error, loading, onCancle }) => {
       <Wrap>
         <StyledSlider {...setting}>
           {post &&
-            post.postImagesUrl.map((postImage, i) => {
-              return <PostImage src={postImage} alt="test" key={postImage} />;
+            post.postFilesUrl.map((postFile, i) => {
+              return <PostImage src={postFile} alt="test" key={postFile} />;
             })}
         </StyledSlider>
       </Wrap>

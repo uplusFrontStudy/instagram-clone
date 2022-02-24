@@ -1,6 +1,5 @@
-import React, { Children, useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
-import deleteImg from '../../images/delete.png';
 
 //1. 첫번쨰 이미지가 preview로 보이는 upload //coverFile
 //2. 모든 이미지가 preivew로 보이는 uploadImage List //postFiles
@@ -14,7 +13,7 @@ const initialGrabDate = {
   position: null,
 };
 
-const FilePreview = ({
+const DraggableList = ({
   postFiles,
   onChangeImages,
   children,
@@ -111,59 +110,6 @@ const FilePreview = ({
     e.target.style.visibility = 'visible';
   };
 
-  /*const PreviewItem = ({ file, isImageFile, onRemove, index }) => (
-    <>
-      <ImagePreview
-        src={URL.createObjectURL(file)}
-        alt={`file preview ${file.name}`}
-        data-position={index}
-        draggable="true"
-        onDragOver={onDragOver}
-        onDragStart={onDragStart}
-        onDragEnter={onDragEnter}
-        onDrop={onDrop}
-        onDragLeave={onDragLeave}
-      />
-       {otherProps.listPreview && (
-        <FileMetaData
-          isImageFile={isImageFile}
-          listPreview={otherProps.listPreview}
-        >
-          <RemoveFileIcon onClick={() => onRemove(file.name)}>
-            <img src={deleteImg} alt="delete" />
-          </RemoveFileIcon>
-        </FileMetaData>
-      )} 
-    </>
-  );
-
-    const Preview = ({ files }) => (
-    <>
-      {Object.keys(files).map((fileName, index) => {
-        let file = files[fileName];
-        let isImageFile = file.type.split('/')[0] === 'image';
-        console.log('확인');
-        return (
-          <PreviewItemContainer key={fileName} {...otherProps}>
-            {isImageFile && (
-              <ImagePreview
-                src={URL.createObjectURL(file)}
-                alt={`file preview ${file.name}`}
-                data-position={index}
-                draggable="true"
-                onDragOver={onDragOver}
-                onDragStart={onDragStart}
-                onDragEnter={onDragEnter}
-                onDrop={onDrop}
-                onDragEnd={onDragEnd}
-              />
-            )}
-          </PreviewItemContainer>
-        );
-      })}
-    </>
-  ); */
-
   const onRemove = ({ filename }) => {
     const nextPostFiles = uploadFiles.filter(
       (image) => image.name !== filename,
@@ -174,15 +120,13 @@ const FilePreview = ({
 
   useEffect(() => {
     console.log('확인');
-    console.log(postFiles);
     setUploadFiles(postFiles);
   }, [postFiles]);
 
+  console.log(uploadFiles);
   return (
     <FileReviewBlock>
       <PreviewSection>
-        {/* {uploadFiles && <Preview files={uploadFiles} />} */}
-        {console.log(uploadFiles)}
         {uploadFiles &&
           Object.keys(uploadFiles).map((fileName, index) => {
             let file = uploadFiles[fileName];
@@ -220,7 +164,7 @@ const FilePreview = ({
   );
 };
 
-export default FilePreview;
+export default DraggableList;
 
 const FileReviewBlock = styled.div`
   display: flex;
@@ -234,7 +178,7 @@ const PreviewSection = styled.section`
 `;
 
 const FileMetaData = styled.div`
-  display: ${(props) => (props.isImageFile ? 'none' : 'flex')};
+  display: none;
   flex-direction: column;
   position: absolute;
   align-items: center;
@@ -263,9 +207,8 @@ const RemoveFileIcon = styled.a`
 
 const PreviewItemContainer = styled.div`
   height: 100%;
-  /* 97px 8px*/
-  width: ${(props) => (props.listPreview ? '97px' : '100%')};
-  margin-right: ${(props) => (props.listPreview ? '8px' : '')};
+  width: 97px;
+  margin-right: 8px;
   position: relative;
 
   /*  ${(props) =>

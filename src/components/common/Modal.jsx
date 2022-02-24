@@ -36,8 +36,9 @@ const ModalBlock = styled.div`
   & * {
     box-sizing: border-box;
   }
-  ${props => props.isSearchModal 
-    && css`
+  ${(props) =>
+    props.isSearchModal &&
+    css`
       position: absolute;
       top: 60px;
       left: 50%;
@@ -47,13 +48,19 @@ const ModalBlock = styled.div`
         position: absolute;
         border-style: solid;
         border-width: 0 12px 12px 12px;
-        border-color: #FFFFFF transparent;
+        border-color: #ffffff transparent;
         display: block;
         width: 0;
         z-index: 1;
-        top: -12px; 
-        left: 49px; 
-        }
+        top: -12px;
+        left: 49px;
+      }
+    `}
+  ${(props) =>
+    props.writeModal &&
+    css`
+      max-height: calc(100% - 40px);
+      margin: 20px;
     `}
 `;
 
@@ -91,12 +98,19 @@ const CancelBtn = styled.div`
 
 //https://velog.io/@tlatjdgh3778/React%EC%97%90%EC%84%9C-Modal-%EA%B5%AC%ED%98%84
 
-const Modal = ({ visible, title, onCancle, children, isSearchModal }) => {
+const Modal = ({
+  visible,
+  title,
+  onCancle,
+  children,
+  isSearchModal,
+  ...rest
+}) => {
   const modalEl = useRef();
 
   const handleClickOutside = (e) => {
     if (visible && modalEl.current && !modalEl.current.contains(e.target)) {
-      onCancle();
+      onCancle(e);
     }
   };
 
@@ -106,30 +120,16 @@ const Modal = ({ visible, title, onCancle, children, isSearchModal }) => {
     return () => {
       document.body.removeEventListener('click', handleClickOutside);
     };
-  }, );
-  /*   const handleClickOutside = (e) => {
-    if (visible && modalEl.current && !modalEl.current.contains(e.target)) {
-      onCancle();
-    }
-  };
-
-  useEffect(() => {
-    document.body.addEventListener('click', handleClickOutside);
-
-    return () => {
-      document.body.removeEventListener('click', handleClickOutside);
-    };
-  }, []); */
+  });
 
   if (!visible) return null;
 
   return (
     <Fullscreen>
-      <ModalBlock ref={modalEl} isSearchModal={isSearchModal}>
+      <ModalBlock ref={modalEl} isSearchModal={isSearchModal} {...rest}>
         {title && <Header>{title}</Header>}
         {children}
       </ModalBlock>
-      )
     </Fullscreen>
   );
 };

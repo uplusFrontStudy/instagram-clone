@@ -1,21 +1,99 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import Button from '../common/Button';
+import uploadBtn from '../../../src/images/uploadBtn.png';
 
-export const FileUploadContainer = styled.section`
-  position: relative;
-  border: 2px dotted lightgray;
-  padding: 35px 20px;
-  border-radius: 6px;
+//file input tag
+//file upload button
+//1. 첫번쨰 이미지가 preview로 보이는 upload
+//2. 모든 이미지가 preivew로 보이는 uploadImage List
+
+const DEFAULT_MAX_FILE_SIZE_IN_BYTES = 500000;
+
+const FileUpload = ({
+  onChangeImages,
+  postFiles,
+  children,
+  maxFileSizeInBytes = DEFAULT_MAX_FILE_SIZE_IN_BYTES,
+  ...otherProps
+}) => {
+  //upload button 클릭 시 -> input tag 클릭
+  const fileInputField = useRef(null);
+  const [uploadFiles, setUploadFiles] = useState([]);
+
+  const handleUploadBtnClick = () => {
+    fileInputField.current.click();
+  };
+
+  //파일 사이즈 체크
+  const addNewFiles = (newFiles) => {
+    let tempArray = [];
+    for (let file of newFiles) {
+      if (file.size <= maxFileSizeInBytes) {
+        if (!otherProps.multiple) {
+          return [file];
+        }
+        tempArray.push(file);
+      }
+    }
+    return uploadFiles.concat(tempArray);
+  };
+
+  const insertFiles = (files) => {
+    onChangeImages(files);
+  };
+
+  const handleNewFileUpload = (e) => {
+    const { files: newFiles } = e.target;
+
+    if (newFiles.length) {
+      const addFiles = addNewFiles(newFiles);
+      setUploadFiles(addFiles);
+      insertFiles(addFiles);
+    }
+  };
+
+  useEffect(() => {
+    setUploadFiles(postFiles);
+  }, [postFiles]);
+
+  return (
+    <FileUploadBlock>
+      <FormField
+        type="file"
+        ref={fileInputField}
+        onChange={handleNewFileUpload}
+        title=""
+        value=""
+        {...otherProps}
+      />
+      <UploadSection>
+        {children}
+
+        {otherProps.previewList ? (
+          <PreviewListUploadBtn>
+            <img src={uploadBtn} alt="uploadBtn" />
+          </PreviewListUploadBtn>
+        ) : (
+          <UploadFileBtn cyan onClick={handleUploadBtnClick}>
+            컴퓨터에서 선택
+          </UploadFileBtn>
+        )}
+      </UploadSection>
+    </FileUploadBlock>
+  );
+};
+
+export default FileUpload;
+
+const FileUploadBlock = styled.div`
+  flex: auto;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: rgba(var(--b3f, 250, 250, 250), 1);
-  height: 100%;
 `;
 
-export const FormField = styled.input`
+const FormField = styled.input`
   font-size: 18px;
-  display: block;
+  display: ${(props) => (props.previewList ? 'none' : 'block')};
   width: 100%;
   border: none;
   text-transform: none;
@@ -25,100 +103,31 @@ export const FormField = styled.input`
   right: 0;
   bottom: 0;
   opacity: 0;
+
   &:focus {
     outline: none;
   }
 `;
 
-export const CoverPreviewImage = styled.img`
-  position: absolute;
+const UploadSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  width: 100%;
-  top: 0;
-  bottom: 0;
-  margin: auto 0;
+  height: 100%;
 `;
 
-export const DragDropText = styled.p`
-  color: #262626;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
-  margin-bottom: 12px;
+const UploadFileBtn = styled(Button)`
+  margin-top: 24px;
+  cursor: pointer;
+  z-index: 1;
 `;
-const DEFAULT_MAX_FILE_SIZE_IN_BYTES = 500000;
 
-export default function FileUpload({
-  name,
-  onChangeImages,
-  images,
-  maxFileSizeInBytes = DEFAULT_MAX_FILE_SIZE_IN_BYTES,
-  ...otherProps
-}) {
-  const [localFiles, setLocalFiles] = useState([]);
-
-  //파일 사이즈 체크 및 등등
-  const addNewFiles = useCallback(
-    (newFiles) => {
-      let tempArray = [];
-      for (let file of newFiles) {
-        if (file.size <= maxFileSizeInBytes) {
-          if (!otherProps.multiple) {
-            return [file];
-          }
-          tempArray.push(file);
-        }
-      }
-
-      return localFiles.concat(tempArray);
-    },
-    [maxFileSizeInBytes, localFiles, otherProps.multiple],
-  );
-
-  const insertFile = useCallback(
-    (files) => {
-      onChangeImages({
-        key: name,
-        value: files,
-      });
-    },
-    [onChangeImages, name],
-  );
-
-  const handleNewFileUpload = useCallback(
-    (e) => {
-      const { files: newFiles } = e.target;
-
-      if (newFiles.length) {
-        const addFiles = addNewFiles(newFiles);
-        setLocalFiles(addFiles);
-        insertFile(addFiles);
-      }
-    },
-    [addNewFiles, insertFile],
-  );
-
-  useEffect(() => {
-    setLocalFiles(images);
-  }, [images]);
-
-  return (
-    <>
-      <FileUploadContainer>
-        <FormField type="file" onChange={handleNewFileUpload} {...otherProps} />
-        {localFiles &&
-          !otherProps.multiple &&
-          Object.keys(localFiles).map((index) => {
-            let file = localFiles[index];
-            return (
-              <CoverPreviewImage
-                src={URL.createObjectURL(file)}
-                alt="image"
-                key={index}
-              ></CoverPreviewImage>
-            );
-          })}
-      </FileUploadContainer>
-    </>
-  );
-}
+const PreviewListUploadBtn = styled.button`
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  border: 1px solid #dbdbdb;
+  background-color: transparent;
+`;

@@ -1,112 +1,65 @@
-import React from 'react';
-import styled from 'styled-components';
-import Header from '../components/common/Header';
-import Responsive from '../components/common/Responsive';
-import WriteActionButtonContainer from '../containers/post/WriteActionButtonContainer';
+import React, { useEffect, useState } from 'react';
 import WriteContainer from '../containers/post/WriteContainer';
-import WriteFilePreviewContainer from '../containers/post/WriteFilePreviewContainer';
 import WriteFileUploadContainer from '../containers/post/WriteFileUploadContainer';
-import plusImg from '../images/plus.png';
-
-const WriteLayout = styled(Responsive)`
-  margin: 60px auto 0;
-  max-width: 935px;
-`;
-
-const WriteInner = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const PostCoverImage = styled.div`
-  flex-basis: 320px;
-  flex-grow: 0;
-  display: block;
-  margin-right: 60px;
-  background-color: beige;
-`;
-
-const PostContent = styled.div`
-  display: block;
-  flex-grow: 1;
-  max-width: 555px;
-`;
-
-const PostPreView = styled.div`
-  display: flex;
-  width: 100%;
-  overflow: hidden;
-`;
-
-const Title = styled.h2`
-  font-size: 32px;
-  line-height: 40px;
-  font-weight: 300;
-`;
-
-const Label = styled.label`
-  color: #262626;
-  display: block;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
-  margin-top: 28px;
-  margin-bottom: 10px;
-`;
-
-const FileUploadBtn = styled.div`
-  position: relative;
-  width: 62px;
-  height: 100%;
-  margin-left: 10px;
-  cursor: pointer;
-`;
-
-const Image = styled.img`
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  margin: auto;
-`;
+import WriteFilePreviewContainer from '../containers/post/WriteFilePreviewContainer';
+import WritePreviewListContainer from '../containers/post/WritePreviewListContainer';
+import WriteModalContainer from '../containers/post/WriteModalContainer';
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 function WritePage() {
+  const [modal, setModal] = useState(false);
+
+  const { view } = useSelector(({ write }) => ({
+    view: write.view,
+  }));
+
+  useEffect(() => {
+    setModal(true);
+  }, [modal, view]);
+
+  console.log('WritePage');
   return (
     <>
-      <Header />
-      <WriteLayout>
-        <WriteInner>
-          <PostCoverImage>
-            <WriteFileUploadContainer
-              name="coverImage"
-              accept=".jpg,.png,.jpeg"
-            />
-          </PostCoverImage>
-          <PostContent>
-            <Title> 새 피드 추가하기</Title>
-            <Label>이미지 업로드</Label>
-            <PostPreView>
+      <WriteModalContainer visible={modal}>
+        {view === 'upload' && (
+          <WriteUploadForm>
+            <WriteFileUploadContainer />
+            {/*  <WriteFilePreviewContainer /> */}
+            {/*    <WritePreviewListContainer /> */}
+          </WriteUploadForm>
+        )}
+        {view === 'content' && (
+          <PreviewListForm>
+            <WriteUploadForm>
               <WriteFilePreviewContainer />
-              <FileUploadBtn>
-                <WriteFileUploadContainer
-                  name="postImages"
-                  accept=".jpg,.png,.jpeg"
-                  multiple
-                />
-                <Image src={plusImg} alt="plus" />
-              </FileUploadBtn>
-            </PostPreView>
+            </WriteUploadForm>
             <WriteContainer />
-            <WriteActionButtonContainer />
-          </PostContent>
-        </WriteInner>
-      </WriteLayout>
+          </PreviewListForm>
+        )}
+      </WriteModalContainer>
     </>
   );
 }
 
 export default WritePage;
+
+const WriteUploadForm = styled.div`
+  display: flex;
+  height: 750px;
+  width: 750px;
+  max-height: min(calc(100vw - 372px), 855px);
+  max-width: min(calc(100vw - 372px), 855px);
+  min-height: 348px;
+  min-width: 348px;
+`;
+
+const PreviewListForm = styled.div`
+  display: flex;
+  height: 793px;
+  width: 1090px;
+  max-width: 1195px;
+  min-width: 688px;
+  min-height: 391px;
+  max-height: 898px;
+`;

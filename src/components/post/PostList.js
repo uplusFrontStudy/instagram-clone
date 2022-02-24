@@ -31,7 +31,7 @@ const PostList = ({
             posts.map((post, i) => {
               return (
                 <PostItem key={post.id} onClick={() => getPost(post.id)}>
-                  <img src={post.coverImageUrl} alt="test" key={post.id} />
+                  <img src={post.postFilesUrl[0]} alt="test" key={post.id} />
                 </PostItem>
               );
             })}

@@ -1,30 +1,29 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import FileUpload from '../../components/post/FileUpload';
+import WriteFileUpload from '../../components/post/WriteFileUpload';
 import { changeField } from '../../modules/write';
 
-const WriteFileUploadContainer = ({ name, ...otherProps }) => {
+const WriteFileUploadContainer = () => {
   const dispatch = useDispatch();
-  const { coverImage, postImages } = useSelector(({ write }) => ({
-    coverImage: write.coverImage,
-    postImages: write.postImages,
+  const { postFiles } = useSelector(({ write }) => ({
+    postFiles: write.postFiles,
   }));
 
   const onChangeImages = useCallback(
-    (paylod) => {
-      dispatch(changeField(paylod));
+    (newFiles) => {
+      dispatch(
+        changeField({
+          key: 'postFiles',
+          value: newFiles,
+        }),
+      );
     },
     [dispatch],
   );
-
+  console.log('WriteFileUploadContainer');
   return (
-    <FileUpload
-      name={name}
-      onChangeImages={onChangeImages}
-      images={name === 'coverImage' ? coverImage : postImages}
-      {...otherProps}
-    />
+    <WriteFileUpload onChangeImages={onChangeImages} postFiles={postFiles} />
   );
 };
 
