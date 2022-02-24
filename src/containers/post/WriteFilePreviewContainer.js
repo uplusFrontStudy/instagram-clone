@@ -1,30 +1,30 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import FilePreview from '../../components/post/FilePreview';
 import { changeField } from '../../modules/write';
+import WritePreview from '../../components/post/WritePreview';
+import styled from 'styled-components';
+import WriteFileUpload from '../../components/post/WriteFileUpload';
 
-const WriteFilePreviewContainer = () => {
+const WriteFilePreviewContainer = ({ children }) => {
   const dispatch = useDispatch();
-  const { postImages } = useSelector(({ write }) => ({
-    postImages: write.postImages,
+  const { postFiles } = useSelector(({ write }) => ({
+    postFiles: write.postFiles,
   }));
 
   const onChangeImages = useCallback(
     (newFiles) => {
       dispatch(
         changeField({
-          key: 'postImages',
+          key: 'postFiles',
           value: newFiles,
         }),
       );
     },
     [dispatch],
   );
-
-  return (
-    <FilePreview postImages={postImages} onChangeImages={onChangeImages} />
-  );
+  console.log('WriteFilePreviewContainer');
+  return <WritePreview postFiles={postFiles} onChangeImages={onChangeImages} />;
 };
 
 export default WriteFilePreviewContainer;

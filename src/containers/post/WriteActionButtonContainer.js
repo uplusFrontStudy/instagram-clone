@@ -6,23 +6,19 @@ import { writePost } from '../../modules/write';
 
 const WriteActionButtonContainer = ({ history }) => {
   const dispatch = useDispatch();
-  const { coverImage, postImages, content, post, postError } = useSelector(
-    ({ write }) => ({
-      coverImage: write.coverImage,
-      postImages: write.postImages,
-      content: write.content,
-      post: write.post,
-      postError: write.postError,
-    }),
-  );
+  const { postFiles, content, post, postError } = useSelector(({ write }) => ({
+    postFiles: write.postFiles,
+    content: write.content,
+    post: write.post,
+    postError: write.postError,
+  }));
 
   const onPublish = (e) => {
     e.preventDefault();
     dispatch(
       writePost({
         content,
-        coverImage,
-        postImages,
+        postFiles,
       }),
     );
   };

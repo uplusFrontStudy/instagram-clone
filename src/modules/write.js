@@ -6,6 +6,8 @@ const CHANGE_FILED = 'write/CHANGE_FILED';
 const WRITE_POST = 'write/WRITE_POST';
 const WRITE_POST_SUCCESS = 'write/WRITE_POST_SUCCESS';
 const WRITE_POST_FAILURE = 'write/WRITE_POST_FAILURE';
+const SET_VIEW = 'write/SET_VIEW';
+
 //액션 생성 함수
 export const initialize = () => ({ type: INITIALIZE });
 export const changeField = ({ key, value }) => ({
@@ -13,21 +15,22 @@ export const changeField = ({ key, value }) => ({
   key,
   value,
 });
+export const setView = (view) => ({ type: SET_VIEW, payload: view });
 
 //thunk 함수
 export const writePost =
-  ({ content, coverImage, postImages }) =>
+  ({ postFiles, content, logginedUser }) =>
   async (dispach) => {
     dispach({ type: WRITE_POST });
     try {
       const response = await postsAPI.writePost({
+        postFiles,
         content,
-        coverImage,
-        postImages,
+        logginedUser,
       });
       dispach({
         type: WRITE_POST_SUCCESS,
-        payload: { _id: response, content, coverImage, postImages },
+        payload: { _id: response, content, postFiles },
       });
     } catch (error) {
       dispach({
@@ -40,20 +43,23 @@ export const writePost =
 
 //초기값
 const initialState = {
-  coverImage: '',
-  postImages: [],
+  postFiles: [],
   content: '',
   post: null,
   postError: null,
+  view: 'upload',
 };
 
 //리듀서
 export default function write(state = initialState, action) {
   switch (action.type) {
-    case INITIALIZE:
+    case SET_VIEW:
       return {
-        state: initialState,
+        ...state,
+        view: action.payload,
       };
+    case INITIALIZE:
+      return initialState;
     case CHANGE_FILED:
       return {
         ...state,

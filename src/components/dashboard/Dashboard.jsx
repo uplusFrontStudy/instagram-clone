@@ -35,7 +35,7 @@ const Dashboard = ({ followPosts, loading, error }) => {
                   </Profile>
                   <Postinfo />
                 </PostHeader>
-                <Slider postImagesUrl={followPost.postImagesUrl} />
+                <Slider postFilesUrl={followPost.postFilesUrl} />
                 <PostButtonSection>
                   <LikeButton />
                   <CommentButton />

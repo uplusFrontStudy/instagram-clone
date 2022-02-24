@@ -12,6 +12,7 @@ const PostModalContainer = () => {
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
+    console.log(post);
     if (post) setModal(true);
   }, [post]);
 

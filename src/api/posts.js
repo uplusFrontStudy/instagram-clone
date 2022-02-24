@@ -22,15 +22,14 @@ export const uploader = async (images) => {
   return imageUrl;
 };
 
-export const writePost = async ({ content, coverImage, postImages }) => {
-  const coverImageUrl = await uploader(coverImage);
-  const postImagesUrl = await uploader(postImages);
+export const writePost = async ({ postFiles, content, logginedUser }) => {
+  const postFilesUrl = await uploader(postFiles);
 
   try {
     return await addDoc(collection(getFirestore(), 'posts'), {
+      postFilesUrl: postFilesUrl,
       content: content,
-      coverImageUrl: coverImageUrl,
-      postImagesUrl: postImagesUrl,
+      userId: logginedUser,
       createAt: Date.now(),
     });
   } catch (e) {

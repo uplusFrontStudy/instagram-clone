@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Responsive from './Responsive';
 import logo from '../../images/instagram_logo.png';
 import Button from '../common/Button';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import SearchContainer from '../../containers/SearchContainer';
 import Avatar from '../profile/Avatar';
 
@@ -50,6 +50,7 @@ const StyledButton = styled(Button)`
 `;
 
 const Header = ({ user, onLogout }) => {
+  let location = useLocation();
   return (
     <>
       <HeaderBlock>
@@ -59,7 +60,7 @@ const Header = ({ user, onLogout }) => {
               <img src={logo} alt="l" />
             </a>
           </Logo>
-          
+
           <SearchContainer />
 
           <MainMenu>
@@ -99,10 +100,15 @@ const Header = ({ user, onLogout }) => {
                     </a>
                   </li>
                   <li>
-                    <a href="javacript:void(0)">
+                    <Link
+                      to={{
+                        pathname: '/write',
+                        state: { background: location },
+                      }}
+                    >
                       <svg
                         aria-label="새로운 게시물"
-                        class="_8-yf5 "
+                        className="_8-yf5 "
                         color="#262626"
                         fill="#262626"
                         height="22"
@@ -114,7 +120,7 @@ const Header = ({ user, onLogout }) => {
                         <path d="M36.3 25.5H11.7c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5h24.6c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5z"></path>
                         <path d="M24 37.8c-.8 0-1.5-.7-1.5-1.5V11.7c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5v24.6c0 .8-.7 1.5-1.5 1.5z"></path>
                       </svg>
-                    </a>
+                    </Link>
                   </li>
                   <li>
                     <a href="javacript:void(0)">
@@ -154,7 +160,7 @@ const Header = ({ user, onLogout }) => {
                   </li>
                   <li>
                     <Link to={`/${user[0].userId}`}>
-                    <Avatar profileURL={user[0].profileURL} size="22px"/>
+                      <Avatar profileURL={user[0].profileURL} size="22px" />
                     </Link>
                     <StyledButton cyan onClick={onLogout}>
                       로그아웃
